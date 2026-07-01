@@ -4,65 +4,19 @@ version = "0.1.0"
 description = "Modern modular reconnaissance framework for bug bounty hunters and security researchers."
 readme = "README.md"
 requires-python = ">=3.13"
-license = { file = "LICENSE" }
 
 authors = [
-    { name = "Alireza", email = "al.rakhodapour@gmail.com" }
-]
-
-keywords = [
-    "bug-bounty",
-    "reconnaissance",
-    "security",
-    "pentest",
-    "osint",
-    "automation"
-]
-
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
-    "Operating System :: OS Independent",
-    "Environment :: Console",
-    "License :: OSI Approved :: MIT License",
-    "Topic :: Security",
+    { name = "Alireza" }
 ]
 
 dependencies = [
     "typer>=0.16.0",
     "rich>=14.0.0",
-    "httpx>=0.28.1",
-    "dnspython>=2.7.0",
-    "pydantic>=2.11.0",
-    "pydantic-settings>=2.10.0",
 ]
 
 [project.scripts]
-hunterx = "hunterx.cli.app:app"
-
-[project.urls]
-Homepage = "https://github.com/ReconHive/hunterx"
-Repository = "https://github.com/ReconHive/hunterx"
-Issues = "https://github.com/ReconHive/hunterx/issues"
+hunterx = "hunterx.cli.app:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.ruff]
-line-length = 100
-target-version = "py313"
-
-[tool.ruff.lint]
-select = [
-    "E",
-    "F",
-    "I",
-    "UP",
-    "B",
-]
-
-[tool.pytest.ini_options]
-pythonpath = ["."]
-testpaths = ["tests"]
