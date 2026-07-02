@@ -10,8 +10,14 @@ import httpx
 
 from hunterx.core.logger import logger
 
+from hunterx.core.config import Config
+
 
 class HTTPFingerprint:
+
+    def __init__(self) -> None:
+
+        self.config = Config()
 
     def analyze(self, target: str) -> None:
 
@@ -23,8 +29,8 @@ class HTTPFingerprint:
 
             response = httpx.get(
                 url,
-                timeout=10,
-                follow_redirects=True,
+                timeout=self.config.http.timeout,
+                follow_redirects=self.config.http.follow_redirects,
             )
 
             html = response.text

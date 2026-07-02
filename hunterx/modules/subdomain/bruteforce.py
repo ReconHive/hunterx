@@ -8,12 +8,17 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 from hunterx.core.dns import DNSPool
+from hunterx.core.config import Config
 
 
 class Bruteforce:
 
-    def __init__(self, workers: int = 50) -> None:
-        self.workers = workers
+    def __init__(self) -> None:
+
+        config = Config()
+
+        self.workers = config.scanner.workers
+
         self.pool = DNSPool()
 
     def _resolve(

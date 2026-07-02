@@ -1,14 +1,11 @@
-from __future__ import annotations
 """
 HunterX Application Core
 """
-import asyncio
 
-from hunterx.modules.test.plugin import TestPlugin
+from __future__ import annotations
 
-from hunterx.core.config import Settings
+from hunterx.core.config import Config
 from hunterx.core.logger import logger
-from hunterx.modules.dns.resolver import DNSResolver
 from hunterx.core.scanner import ScanEngine
 
 
@@ -21,7 +18,7 @@ class HunterX:
 
     def __init__(self) -> None:
 
-        self.settings = Settings()
+        self.config = Config()
 
         self.initialized = False
 
@@ -32,7 +29,6 @@ class HunterX:
         self.initialized = True
 
         logger.success("Framework initialized.")
-
 
     def run(self, target: str) -> None:
 

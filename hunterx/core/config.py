@@ -1,28 +1,55 @@
 """
 HunterX Configuration
-
-Central configuration object for the framework.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(slots=True)
-class Settings:
-    """
-    Global HunterX settings.
-    """
+class DNSConfig:
 
-    timeout: int = 10
+    timeout: float = 2.0
+
+    lifetime: float = 2.0
+
+    nameservers: list[str] = field(
+        default_factory=lambda: [
+            "1.1.1.1",
+            "8.8.8.8",
+            "9.9.9.9",
+        ]
+    )
+
+
+@dataclass(slots=True)
+class ScannerConfig:
+
+    workers: int = 50
 
     retries: int = 2
 
-    threads: int = 10
 
-    verify_ssl: bool = True
+@dataclass(slots=True)
+class HTTPConfig:
 
-    user_agent: str = (
-        "HunterX/0.1.0"
+    timeout: float = 10.0
+
+    follow_redirects: bool = True
+
+
+@dataclass(slots=True)
+class Config:
+
+    dns: DNSConfig = field(
+        default_factory=DNSConfig
+    )
+
+    scanner: ScannerConfig = field(
+        default_factory=ScannerConfig
+    )
+
+    http: HTTPConfig = field(
+        default_factory=HTTPConfig
     )

@@ -8,6 +8,7 @@ import time
 
 import httpx
 
+from hunterx.core.config import Config
 from hunterx.core.logger import logger
 
 
@@ -15,6 +16,10 @@ class HTTPClient:
     """
     Retrieve basic HTTP information.
     """
+
+    def __init__(self) -> None:
+
+        self.config = Config()
 
     def fetch(self, target: str) -> None:
 
@@ -28,8 +33,8 @@ class HTTPClient:
 
             response = httpx.get(
                 url,
-                timeout=10,
-                follow_redirects=True,
+                timeout=self.config.http.timeout,
+                follow_redirects=self.config.http.follow_redirects,
             )
 
             elapsed = time.perf_counter() - start

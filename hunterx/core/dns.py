@@ -6,22 +6,20 @@ from __future__ import annotations
 
 import dns.resolver
 
+from hunterx.core.config import Config
+
 
 class DNSPool:
 
     def __init__(self) -> None:
 
+        config = Config()
+
         self.resolver = dns.resolver.Resolver()
 
-        self.resolver.nameservers = [
-            "1.1.1.1",   # Cloudflare
-            "8.8.8.8",   # Google
-            "9.9.9.9",   # Quad9
-        ]
-
-        self.resolver.timeout = 2
-
-        self.resolver.lifetime = 2
+        self.resolver.timeout = config.dns.timeout
+        self.resolver.lifetime = config.dns.lifetime
+        self.resolver.nameservers = config.dns.nameservers
 
     def resolve(self, host: str):
 
