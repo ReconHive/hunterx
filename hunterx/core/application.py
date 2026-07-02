@@ -8,6 +8,7 @@ from hunterx.modules.test.plugin import TestPlugin
 
 from hunterx.core.config import Settings
 from hunterx.core.logger import logger
+from hunterx.modules.dns.resolver import DNSResolver
 
 
 class HunterX:
@@ -37,6 +38,6 @@ class HunterX:
         if not self.initialized:
             self.initialize()
 
-        plugin = TestPlugin()
+        resolver = DNSResolver()
 
-        asyncio.run(plugin.execute(target))
+        resolver.resolve(target)

@@ -49,17 +49,9 @@ def modules():
     console.print(" • Screenshot")
     console.print(" • Report")
 
-
 @app.command()
 def scan(target: str):
-    """
-    Scan target.
-    """
 
     hunter = HunterX()
 
     hunter.run(target)
-
-    logger.info(f"Target: {target}")
-    logger.info(f"Timeout: {hunter.settings.timeout}s")
-    logger.info(f"Threads: {hunter.settings.threads}")
