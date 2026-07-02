@@ -9,6 +9,7 @@ from hunterx.modules.test.plugin import TestPlugin
 from hunterx.core.config import Settings
 from hunterx.core.logger import logger
 from hunterx.modules.dns.resolver import DNSResolver
+from hunterx.core.scanner import ScanEngine
 
 
 class HunterX:
@@ -38,6 +39,6 @@ class HunterX:
         if not self.initialized:
             self.initialize()
 
-        resolver = DNSResolver()
+        engine = ScanEngine()
 
-        resolver.resolve(target)
+        engine.run(target)
