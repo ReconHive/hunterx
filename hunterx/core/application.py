@@ -1,10 +1,13 @@
+from __future__ import annotations
 """
 HunterX Application Core
 """
+import asyncio
 
-from __future__ import annotations
+from hunterx.modules.test.plugin import TestPlugin
 
 from hunterx.core.config import Settings
+from hunterx.core.logger import logger
 
 
 class HunterX:
@@ -22,9 +25,18 @@ class HunterX:
 
     def initialize(self) -> None:
 
+        logger.info("Initializing HunterX framework...")
+
         self.initialized = True
 
-    def run(self) -> None:
+        logger.success("Framework initialized.")
+
+
+    def run(self, target: str) -> None:
 
         if not self.initialized:
             self.initialize()
+
+        plugin = TestPlugin()
+
+        asyncio.run(plugin.execute(target))
