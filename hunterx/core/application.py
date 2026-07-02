@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from hunterx.core.config import Config
 from hunterx.core.logger import logger
+from hunterx.core.result import ScanResult
 from hunterx.core.scanner import ScanEngine
 
 
@@ -19,6 +20,8 @@ class HunterX:
     def __init__(self) -> None:
 
         self.config = Config()
+
+        self.result = ScanResult()
 
         self.initialized = False
 
@@ -35,6 +38,6 @@ class HunterX:
         if not self.initialized:
             self.initialize()
 
-        engine = ScanEngine()
+        engine = ScanEngine(self.result)
 
         engine.run(target)

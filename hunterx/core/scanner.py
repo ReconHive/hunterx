@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from hunterx.core.logger import logger
 from hunterx.core.module_manager import ModuleManager
+from hunterx.core.result import ScanResult
 
 from hunterx.modules.dns.resolver import DNSResolver
 from hunterx.modules.dns.records import DNSRecords
@@ -19,21 +20,21 @@ class ScanEngine:
     Coordinates all scan modules.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, result: ScanResult) -> None:
+
+        self.result = result
+
         self.manager = ModuleManager()
 
-        resolver = DNSResolver()
-        records = DNSRecords()
-        http = HTTPClient()
-        fingerprint = HTTPFingerprint()
-        subdomain = SubdomainScanner()
+        self.resolver = DNSResolver()
+        self.records = DNSRecords()
+        self.http = HTTPClient()
+        self.fingerprint = HTTPFingerprint()
+        self.subdomain = SubdomainScanner()
 
-        self.manager.register(resolver.resolve)
-        self.manager.register(records.lookup)
-        self.manager.register(http.fetch)
-        self.manager.register(fingerprint.analyze)
-        self.manager.register(subdomain.scan)
-
+        self.manager.register(self.run_dns)
+        self.manager.register(self.run_http)
+        self.manager.register(self.run_subdomain)
 
     def run(self, target: str) -> None:
         """
@@ -45,3 +46,23 @@ class ScanEngine:
         self.manager.execute(target)
 
         logger.success("Scan completed.")
+
+    def run_dns(self, target: str) -> None:
+
+        ip = self.resolver.resolve(target)
+
+        self.result.dns["ip"] = ip
+
+        self.records.lookup(target)
+
+    def run_http(self, target: str) -> None:
+
+        self.http.fetch(target)
+
+        self.fingerprint.analyze(target)
+
+    def run_subdomain(self, target: str) -> None:
+
+        hosts = self.subdomain.scan(target)
+
+        self.result.subdomains = hosts
