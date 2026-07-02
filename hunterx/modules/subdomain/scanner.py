@@ -9,6 +9,7 @@ from hunterx.core.logger import logger
 
 from hunterx.modules.subdomain.wordlist import Wordlist
 from hunterx.modules.subdomain.bruteforce import Bruteforce
+from hunterx.modules.subdomain.wildcard import WildcardDetector
 
 
 class SubdomainScanner:
@@ -17,9 +18,27 @@ class SubdomainScanner:
 
         self.wordlist = Wordlist()
 
+        self.detector = WildcardDetector()
+
         self.bruteforce = Bruteforce()
 
     def scan(self, target: str):
+        logger.info("Checking wildcard DNS...")
+
+        wildcard = self.detector.detect(target)
+
+        if wildcard:
+
+            logger.warning(
+                "Wildcard DNS detected."
+            )
+
+        else:
+
+            logger.success(
+                "Wildcard DNS not detected."
+            )
+
 
         logger.info("Starting subdomain scan...")
 
