@@ -4,11 +4,15 @@ Wildcard DNS Detection
 
 from __future__ import annotations
 
-import socket
 import uuid
+
+from hunterx.core.dns import DNSPool
 
 
 class WildcardDetector:
+
+    def __init__(self) -> None:
+        self.pool = DNSPool()
 
     def detect(self, target: str) -> bool:
         """
@@ -20,11 +24,8 @@ class WildcardDetector:
         )
 
         try:
-
-            socket.gethostbyname(random_host)
-
+            self.pool.resolve(random_host)
             return True
 
-        except socket.gaierror:
-
+        except Exception:
             return False

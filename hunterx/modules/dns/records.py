@@ -4,8 +4,7 @@ DNS Records Module
 
 from __future__ import annotations
 
-import dns.resolver
-
+from hunterx.core.dns import DNSPool
 from hunterx.core.logger import logger
 
 
@@ -15,7 +14,7 @@ class DNSRecords:
     """
 
     def __init__(self) -> None:
-        self.resolver = dns.resolver.Resolver()
+        self.pool = DNSPool()
 
     def lookup(self, target: str) -> None:
 
@@ -34,7 +33,10 @@ class DNSRecords:
 
             try:
 
-                answers = self.resolver.resolve(target, record_type)
+                answers = self.pool.resolver.resolve(
+                    target,
+                    record_type,
+                )
 
                 for answer in answers:
                     logger.success(str(answer))

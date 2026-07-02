@@ -7,18 +7,28 @@ from __future__ import annotations
 import socket
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
+from hunterx.core.dns import DNSPool
 
 
 class Bruteforce:
 
     def __init__(self, workers: int = 50) -> None:
         self.workers = workers
+        self.pool = DNSPool()
 
-    def _resolve(self, host: str) -> str | None:
+    def _resolve(
+        self,
+        host: str,
+    ) -> str | None:
+
         try:
-            socket.gethostbyname(host)
+
+            self.pool.resolve(host)
+
             return host
-        except socket.gaierror:
+
+        except Exception:
+
             return None
 
     def scan(
