@@ -4,45 +4,35 @@ Subdomain Scanner
 
 from __future__ import annotations
 
-import socket
-
 from hunterx.core.logger import logger
+
+from hunterx.modules.subdomain.wordlist import Wordlist
+from hunterx.modules.subdomain.bruteforce import Bruteforce
 
 
 class SubdomainScanner:
 
-    def __init__(self) -> None:
+    def __init__(self):
 
-        with open(
-            "hunterx/modules/subdomain/wordlist.txt",
-            encoding="utf-8",
-        ) as f:
+        self.wordlist = Wordlist()
 
-            self.words = [
-                line.strip()
-                for line in f
-                if line.strip()
-            ]
+        self.bruteforce = Bruteforce()
 
-    def scan(self, target: str) -> None:
+    def scan(self, target: str):
 
         logger.info("Starting subdomain scan...")
 
-        found = 0
+        words = self.wordlist.load()
 
-        for word in self.words:
+        hosts = self.bruteforce.scan(
+            target,
+            words,
+        )
 
-            host = f"{word}.{target}"
+        for host in hosts:
 
-            try:
+            logger.success(host)
 
-                socket.gethostbyname(host)
-
-                logger.success(host)
-
-                found += 1
-
-            except socket.gaierror:
-                pass
-
-        logger.info(f"Found {found} subdomains.")
+        logger.info(
+            f"Found {len(hosts)} subdomains."
+        )
