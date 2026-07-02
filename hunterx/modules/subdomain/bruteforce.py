@@ -5,9 +5,21 @@ Subdomain Bruteforce Engine
 from __future__ import annotations
 
 import socket
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
 
 
 class Bruteforce:
+
+    def __init__(self, workers: int = 50) -> None:
+        self.workers = workers
+
+    def _resolve(self, host: str) -> str | None:
+        try:
+            socket.gethostbyname(host)
+            return host
+        except socket.gaierror:
+            return None
 
     def scan(
         self,
@@ -15,20 +27,31 @@ class Bruteforce:
         words: list[str],
     ) -> list[str]:
 
-        found = []
+        found: list[str] = []
 
-        for word in words:
+        hosts = [
+            f"{word}.{target}"
+            for word in words
+        ]
 
-            host = f"{word}.{target}"
+        with ThreadPoolExecutor(
+            max_workers=self.workers
+        ) as executor:
 
-            try:
+            futures = [
+                executor.submit(
+                    self._resolve,
+                    host,
+                )
+                for host in hosts
+            ]
 
-                socket.gethostbyname(host)
+            for future in as_completed(futures):
 
-                found.append(host)
+                result = future.result()
 
-            except socket.gaierror:
+                if result:
 
-                continue
+                    found.append(result)
 
-        return found
+        return sorted(found)

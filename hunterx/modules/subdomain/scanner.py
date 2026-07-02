@@ -3,6 +3,7 @@ Subdomain Scanner
 """
 
 from __future__ import annotations
+import time
 
 from hunterx.core.logger import logger
 
@@ -22,6 +23,8 @@ class SubdomainScanner:
 
         logger.info("Starting subdomain scan...")
 
+        start = time.perf_counter()
+
         words = self.wordlist.load()
 
         hosts = self.bruteforce.scan(
@@ -29,10 +32,16 @@ class SubdomainScanner:
             words,
         )
 
+        elapsed = time.perf_counter() - start
+
         for host in hosts:
 
             logger.success(host)
 
         logger.info(
             f"Found {len(hosts)} subdomains."
+        )
+
+        logger.info(
+            f"Elapsed: {elapsed:.2f}s"
         )
