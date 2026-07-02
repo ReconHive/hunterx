@@ -1,5 +1,6 @@
 import typer
 from rich.console import Console
+from hunterx.core.application import HunterX
 
 from hunterx.cli.banner import print_banner
 
@@ -50,16 +51,23 @@ def modules():
 
 @app.command()
 def scan(target: str):
-    """
-    Scan target.
-    """
 
-    print_banner()
+    hunter = HunterX()
+
+    hunter.run()
 
     console.print()
 
-    console.print(f"[cyan]Target[/cyan] : {target}")
+    console.print(f"[bold cyan]Target[/bold cyan] : {target}")
 
-    console.print("[yellow]Loading modules...[/yellow]")
+    console.print(
+        f"[green]Timeout[/green] : {hunter.settings.timeout}s"
+    )
 
-    console.print("[green]Done[/green]")
+    console.print(
+        f"[green]Threads[/green] : {hunter.settings.threads}"
+    )
+
+    console.print()
+
+    console.print("[yellow]Framework initialized[/yellow]")
