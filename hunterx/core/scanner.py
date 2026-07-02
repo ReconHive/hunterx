@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from hunterx.core.logger import logger
 from hunterx.modules.dns.resolver import DNSResolver
+from hunterx.modules.dns.records import DNSRecords
 
 
 class ScanEngine:
@@ -15,14 +16,13 @@ class ScanEngine:
 
     def __init__(self) -> None:
         self.resolver = DNSResolver()
+        self.records = DNSRecords()
 
     def run(self, target: str) -> None:
         """
         Execute scan pipeline.
         """
 
-        logger.info("Starting scan pipeline...")
-
         self.resolver.resolve(target)
 
-        logger.success("Scan pipeline finished.")
+        self.records.lookup(target)
