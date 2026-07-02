@@ -5,6 +5,8 @@ HunterX Scan Engine
 from __future__ import annotations
 
 from hunterx.core.logger import logger
+from hunterx.core.module_manager import ModuleManager
+
 from hunterx.modules.dns.resolver import DNSResolver
 from hunterx.modules.dns.records import DNSRecords
 from hunterx.modules.http.client import HTTPClient
@@ -17,17 +19,25 @@ class ScanEngine:
     """
 
     def __init__(self) -> None:
-        self.resolver = DNSResolver()
-        self.records = DNSRecords()
-        self.http = HTTPClient()
-        self.fingerprint = HTTPFingerprint()
+        self.manager = ModuleManager()
+
+        resolver = DNSResolver()
+        records = DNSRecords()
+        http = HTTPClient()
+        fingerprint = HTTPFingerprint()
+
+        self.manager.register(resolver.resolve)
+        self.manager.register(records.lookup)
+        self.manager.register(http.fetch)
+        self.manager.register(fingerprint.analyze)
 
     def run(self, target: str) -> None:
+        """
+        Execute scan pipeline.
+        """
 
-        self.resolver.resolve(target)
+        logger.info("Starting scan pipeline...")
 
-        self.records.lookup(target)
+        self.manager.execute(target)
 
-        self.http.fetch(target)
-
-        self.fingerprint.analyze(target)
+        logger.success("Scan completed.")
