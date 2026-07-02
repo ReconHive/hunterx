@@ -1,0 +1,16 @@
+www
+api
+dev
+test
+staging
+mail
+admin
+portal
+vpn
+cdn
+img
+static
+beta
+blog
+docs
+ftp
