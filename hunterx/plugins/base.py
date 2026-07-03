@@ -7,11 +7,12 @@ from hunterx.core.result import ScanResult
 
 
 class Plugin(ABC):
-    """
-    Base class for all HunterX plugins.
-    """
 
     name: str = "plugin"
+
+    description: str = ""
+
+    version: str = "0.1.0"
 
     @abstractmethod
     def run(
@@ -19,6 +20,4 @@ class Plugin(ABC):
         target: str,
         result: ScanResult,
     ) -> None:
-        """
-        Execute plugin.
-        """
+        ...

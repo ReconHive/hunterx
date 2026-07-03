@@ -33,11 +33,18 @@ class HunterX:
 
         logger.success("Framework initialized.")
 
-    def run(self, target: str) -> None:
+    def run(
+        self,
+        target: str,
+        plugins: list[str] | None = None,
+    ) -> None:
 
         if not self.initialized:
             self.initialize()
 
         engine = ScanEngine(self.result)
 
-        engine.run(target)
+        engine.run(
+            target,
+            plugins=plugins,
+        )

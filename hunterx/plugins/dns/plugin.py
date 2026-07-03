@@ -4,6 +4,7 @@ from hunterx.plugins.base import Plugin
 
 from hunterx.modules.dns.resolver import DNSResolver
 from hunterx.modules.dns.records import DNSRecords
+from hunterx.core.result import ScanResult
 
 
 class DNSPlugin(Plugin):
@@ -19,7 +20,7 @@ class DNSPlugin(Plugin):
     def run(
         self,
         target: str,
-        result,
+        result: ScanResult,
     ) -> None:
 
         ip = self.resolver.resolve(target)

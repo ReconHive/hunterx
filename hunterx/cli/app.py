@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 import typer
@@ -17,7 +19,7 @@ console = Console()
 
 
 @app.callback()
-def main():
+def main() -> None:
     """
     HunterX CLI
     """
@@ -25,7 +27,7 @@ def main():
 
 
 @app.command()
-def version():
+def version() -> None:
     """
     Show HunterX version.
     """
@@ -40,7 +42,7 @@ def version():
 
 
 @app.command()
-def modules():
+def modules() -> None:
     """
     List available modules.
     """
@@ -54,18 +56,17 @@ def modules():
     )
 
     modules = [
-        "DNS",
-        "HTTP",
-        "Subdomain Enumeration",
-        "Technology Detection",
-        "Security Headers",
-        "Port Scanner (Coming Soon)",
-        "TLS Scanner (Coming Soon)",
-        "Report Generator",
+        "dns",
+        "http",
+        "subdomain",
+        "technology",
+        "security-headers",
+        "port-scanner (coming soon)",
+        "tls-scanner (coming soon)",
+        "report-generator",
     ]
 
     for module in modules:
-
         console.print(f" • {module}")
 
 
@@ -73,15 +74,32 @@ def modules():
 def scan(
     target: str = typer.Argument(
         ...,
-        help="Target domain",
+        help="Target domain or IP address",
+    ),
+    plugins: str | None = typer.Option(
+        None,
+        "--plugins",
+        "-p",
+        help="Comma separated plugins. Example: dns,http,subdomain",
     ),
     output: str | None = typer.Option(
         None,
         "--output",
         "-o",
-        help="Save report to file (.json/.md)",
+        help="Save report (.json/.md)",
     ),
-):
+    timeout: int | None = typer.Option(
+        None,
+        "--timeout",
+        "-t",
+        help="HTTP/DNS timeout",
+    ),
+    threads: int | None = typer.Option(
+        None,
+        "--threads",
+        help="Worker threads",
+    ),
+) -> None:
     """
     Scan target.
     """
@@ -90,39 +108,60 @@ def scan(
 
     hunter = HunterX()
 
-    hunter.run(target)
+    if timeout is not None:
+        hunter.config.http.timeout = timeout
+        hunter.config.dns.timeout = timeout
 
-    if output:
+    if threads is not None:
+        hunter.config.scanner.workers = threads
 
-        manager = OutputManager()
+    selected_plugins: list[str] | None = None
 
-        extension = Path(output).suffix.lower()
+    if plugins:
 
-        formats = {
-            ".json": "json",
-            ".md": "md",
-        }
+        selected_plugins = [
+            plugin.strip().lower()
+            for plugin in plugins.split(",")
+            if plugin.strip()
+        ]
 
-        fmt = formats.get(extension)
+    hunter.run(
+        target=target,
+        plugins=selected_plugins,
+    )
 
-        if fmt is None:
+    if output is None:
+        return
 
-            console.print()
+    manager = OutputManager()
 
-            console.print(
-                "[bold red]Unsupported output format.[/bold red]"
-            )
+    extension = Path(output).suffix.lower()
 
-            raise typer.Exit(code=1)
+    formats = {
+        ".json": "json",
+        ".md": "md",
+    }
 
-        manager.write(
-            fmt,
-            hunter.result,
-            output,
-        )
+    fmt = formats.get(extension)
+
+    if fmt is None:
 
         console.print()
 
         console.print(
-            f"[bold green]Report saved to[/bold green] {output}"
+            "[bold red]Unsupported output format.[/bold red]"
         )
+
+        raise typer.Exit(code=1)
+
+    manager.write(
+        fmt,
+        hunter.result,
+        output,
+    )
+
+    console.print()
+
+    console.print(
+        f"[bold green]Report saved to[/bold green] {output}"
+    )

@@ -24,24 +24,38 @@ class ScanEngine:
 
         loader = PluginLoader()
 
-        self.registry = loader.load()
+        self.plugins = loader.load()
 
     def run(
         self,
         target: str,
+        plugins: list[str] | None = None,
     ) -> None:
+        """
+        Execute scan pipeline.
+        """
 
         logger.info("Starting scan pipeline...")
 
-        for plugin in self.registry.plugins():
+        selected = self.plugins.select(plugins)
+
+        if plugins and not selected:
+
+            logger.warning(
+                "No matching plugins were found."
+            )
+
+            return
+
+        for plugin in selected:
 
             logger.info(
                 f"Running plugin: {plugin.name}"
             )
 
             plugin.run(
-                target,
-                self.result,
+                target=target,
+                result=self.result,
             )
 
         logger.success("Scan completed.")

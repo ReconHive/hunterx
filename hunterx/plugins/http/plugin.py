@@ -4,6 +4,7 @@ from hunterx.plugins.base import Plugin
 
 from hunterx.modules.http.client import HTTPClient
 from hunterx.modules.http.fingerprint import HTTPFingerprint
+from hunterx.core.result import ScanResult
 
 
 class HTTPPlugin(Plugin):
@@ -19,7 +20,7 @@ class HTTPPlugin(Plugin):
     def run(
         self,
         target: str,
-        result,
+        result: ScanResult,
     ) -> None:
 
         response = self.client.fetch(target)

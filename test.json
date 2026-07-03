@@ -1,0 +1,39 @@
+{
+    "dns": {
+        "ip": "142.251.30.113",
+        "records": {
+            "A": [
+                "142.251.30.101",
+                "142.251.30.100",
+                "142.251.30.102",
+                "142.251.30.139",
+                "142.251.30.138",
+                "142.251.30.113"
+            ],
+            "AAAA": [
+                "2001:4860:4802:32::78"
+            ],
+            "MX": [
+                "10 smtp.google.com."
+            ],
+            "NS": [
+                "ns4.google.com.",
+                "ns3.google.com.",
+                "ns1.google.com.",
+                "ns2.google.com."
+            ],
+            "TXT": [],
+            "CNAME": []
+        }
+    },
+    "http": {
+        "status": null,
+        "server": null,
+        "title": null,
+        "url": null,
+        "headers": {}
+    },
+    "subdomains": {
+        "hosts": []
+    }
+}

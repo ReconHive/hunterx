@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from hunterx.plugins.registry import PluginRegistry
+from hunterx.core.plugins import PluginCollection
 
 from hunterx.plugins.dns.plugin import DNSPlugin
 from hunterx.plugins.http.plugin import HTTPPlugin
@@ -9,16 +9,14 @@ from hunterx.plugins.subdomain.plugin import SubdomainPlugin
 
 class PluginLoader:
 
-    def __init__(self) -> None:
+    def load(self) -> PluginCollection:
 
-        self.registry = PluginRegistry()
+        plugins = PluginCollection()
 
-    def load(self) -> PluginRegistry:
+        plugins.register(DNSPlugin())
 
-        self.registry.register(DNSPlugin())
+        plugins.register(HTTPPlugin())
 
-        self.registry.register(HTTPPlugin())
+        plugins.register(SubdomainPlugin())
 
-        self.registry.register(SubdomainPlugin())
-
-        return self.registry
+        return plugins
