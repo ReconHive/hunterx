@@ -52,7 +52,6 @@ class DNSRecords:
                 results[record_type] = values
 
                 for value in values:
-
                     logger.success(value)
 
             except Exception:
