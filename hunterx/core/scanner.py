@@ -13,6 +13,7 @@ from hunterx.core.events.events import (
     ScanFinished,
     ScanStarted,
 )
+from hunterx.core.hooks.logger import LoggerHook
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.plugins.loader import PluginLoader
@@ -30,11 +31,9 @@ class ScanEngine:
     ) -> None:
 
         self.config = config
-
         self.result = result
 
         loader = PluginLoader()
-
         self.plugins = loader.load()
 
     def run(
@@ -43,10 +42,12 @@ class ScanEngine:
         plugins: list[str] | None = None,
     ) -> None:
 
-        logger.info("Starting scan pipeline...")
-
         container = ServiceContainer(
             self.config,
+        )
+
+        container.hooks.register(
+            LoggerHook()
         )
 
         context = ScanContext(
@@ -57,16 +58,21 @@ class ScanEngine:
             http=container.http,
             dns=container.dns,
             events=container.events,
+            metrics=container.metrics,
         )
 
-        container.hooks.before_scan(context)
+        container.hooks.before_scan(
+            context,
+        )
 
         context.events.publish(
-            ScanStarted(target=target)
+            ScanStarted(
+                target=target,
+            )
         )
 
         selected = self.plugins.select(
-            plugins
+            plugins,
         )
 
         if plugins and not selected:
@@ -92,11 +98,9 @@ class ScanEngine:
                 )
             )
 
-            logger.info(
-                f"Running plugin: {plugin.name}"
+            plugin.run(
+                context,
             )
-
-            plugin.run(context)
 
             context.events.publish(
                 PluginFinished(
@@ -119,6 +123,18 @@ class ScanEngine:
             context,
         )
 
-        container.close()
+        logger.info("Metrics")
 
-        logger.success("Scan completed.")
+        logger.success(
+            f"Elapsed : {context.metrics.elapsed:.2f}s"
+        )
+
+        for name, elapsed in (
+            context.metrics.metrics.plugins.items()
+        ):
+
+            logger.success(
+                f"{name} : {elapsed:.2f}s"
+            )
+
+        container.close()

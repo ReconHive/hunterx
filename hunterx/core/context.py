@@ -9,6 +9,7 @@ from hunterx.core.events.bus import EventBus
 from hunterx.core.http import HTTPPool
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
+from hunterx.core.metrics.manager import MetricsManager
 
 
 @dataclass(slots=True)
@@ -30,5 +31,7 @@ class ScanContext:
     dns: DNSPool
 
     events: EventBus
+
+    metrics: MetricsManager
 
     logger = logger
