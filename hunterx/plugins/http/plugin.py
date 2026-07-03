@@ -4,7 +4,7 @@ from hunterx.core.context import ScanContext
 from hunterx.modules.http.client import HTTPClient
 from hunterx.modules.http.fingerprint import HTTPFingerprint
 from hunterx.plugins.base import Plugin
-
+from hunterx.modules.http.technologies import TechnologyDetector
 
 class HTTPPlugin(Plugin):
 
@@ -15,6 +15,8 @@ class HTTPPlugin(Plugin):
         self.client = HTTPClient()
 
         self.fingerprint = HTTPFingerprint()
+
+        self.technologies = TechnologyDetector()
 
     def run(
         self,
@@ -40,3 +42,22 @@ class HTTPPlugin(Plugin):
             )
 
         self.fingerprint.analyze(context)
+
+        technologies = self.technologies.analyze(
+            context,
+            response,
+        )
+
+        if technologies:
+
+            context.logger.info(
+                "Detected Technologies"
+            )
+
+            for tech in technologies:
+
+                context.logger.success(
+                    tech
+                )
+
+            context.result.http.technologies = technologies

@@ -30,6 +30,10 @@ class HTTPResult:
         default_factory=dict
     )
 
+    technologies: list[str] = field(
+        default_factory=list
+    )
+
 
 @dataclass(slots=True)
 class SubdomainResult:
