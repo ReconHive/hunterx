@@ -27,3 +27,11 @@ class PluginStarted(Event):
 class PluginFinished(Event):
 
     plugin: str
+
+
+@dataclass(slots=True)
+class PluginFailed(Event):
+
+    plugin: str
+
+    error: str

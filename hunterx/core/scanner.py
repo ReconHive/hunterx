@@ -7,6 +7,12 @@ from __future__ import annotations
 from hunterx.core.config import Config
 from hunterx.core.container import ServiceContainer
 from hunterx.core.context import ScanContext
+from hunterx.core.events.events import (
+    PluginFinished,
+    PluginStarted,
+    ScanFinished,
+    ScanStarted,
+)
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.plugins.loader import PluginLoader
@@ -36,9 +42,6 @@ class ScanEngine:
         target: str,
         plugins: list[str] | None = None,
     ) -> None:
-        """
-        Execute scan pipeline.
-        """
 
         logger.info("Starting scan pipeline...")
 
@@ -53,6 +56,11 @@ class ScanEngine:
             container=container,
             http=container.http,
             dns=container.dns,
+            events=container.events,
+        )
+
+        context.events.publish(
+            ScanStarted(target)
         )
 
         selected = self.plugins.select(
@@ -71,11 +79,23 @@ class ScanEngine:
 
         for plugin in selected:
 
+            context.events.publish(
+                PluginStarted(plugin.name)
+            )
+
             logger.info(
                 f"Running plugin: {plugin.name}"
             )
 
             plugin.run(context)
+
+            context.events.publish(
+                PluginFinished(plugin.name)
+            )
+
+        context.events.publish(
+            ScanFinished(target)
+        )
 
         container.close()
 

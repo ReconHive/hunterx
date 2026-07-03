@@ -1,12 +1,9 @@
-"""
-HunterX Service Container
-"""
-
 from __future__ import annotations
 
 from hunterx.core.config import Config
-from hunterx.core.http import HTTPPool
 from hunterx.core.dns import DNSPool
+from hunterx.core.events.bus import EventBus
+from hunterx.core.http import HTTPPool
 
 
 class ServiceContainer:
@@ -22,6 +19,10 @@ class ServiceContainer:
 
         self.dns = DNSPool(config)
 
+        self.events = EventBus()
+
     def close(self) -> None:
 
         self.http.close()
+
+        self.events.clear()
