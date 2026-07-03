@@ -4,8 +4,7 @@ DNS Resolver Module
 
 from __future__ import annotations
 
-from hunterx.core.dns import DNSPool
-from hunterx.core.logger import logger
+from hunterx.core.context import ScanContext
 
 
 class DNSResolver:
@@ -13,27 +12,36 @@ class DNSResolver:
     Resolve domain names to IPv4 addresses.
     """
 
-    def __init__(self) -> None:
-        self.pool = DNSPool()
-
-    def resolve(self, target: str) -> str | None:
+    def resolve(
+        self,
+        context: ScanContext,
+    ) -> str | None:
         """
         Resolve an IPv4 address for the target.
         """
 
-        logger.info(f"Resolving {target}...")
+        context.logger.info(
+            f"Resolving {context.target}..."
+        )
 
         try:
-            answers = self.pool.resolve(target)
+
+            answers = context.dns.resolve(
+                context.target
+            )
 
             ip = answers[0].to_text()
 
-            logger.success(f"Resolved: {ip}")
+            context.logger.success(
+                f"Resolved: {ip}"
+            )
 
             return ip
 
         except Exception:
 
-            logger.error("Failed to resolve target.")
+            context.logger.error(
+                "Failed to resolve target."
+            )
 
             return None

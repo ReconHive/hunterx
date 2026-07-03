@@ -4,31 +4,23 @@ Subdomain Bruteforce Engine
 
 from __future__ import annotations
 
-import socket
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
-from hunterx.core.dns import DNSPool
-from hunterx.core.config import Config
+
+from hunterx.core.context import ScanContext
 
 
 class Bruteforce:
 
-    def __init__(self) -> None:
-
-        config = Config()
-
-        self.workers = config.scanner.workers
-
-        self.pool = DNSPool()
-
     def _resolve(
         self,
+        context: ScanContext,
         host: str,
     ) -> str | None:
 
         try:
 
-            self.pool.resolve(host)
+            context.dns.resolve(host)
 
             return host
 
@@ -38,24 +30,25 @@ class Bruteforce:
 
     def scan(
         self,
-        target: str,
+        context: ScanContext,
         words: list[str],
     ) -> list[str]:
 
         found: list[str] = []
 
         hosts = [
-            f"{word}.{target}"
+            f"{word}.{context.target}"
             for word in words
         ]
 
         with ThreadPoolExecutor(
-            max_workers=self.workers
+            max_workers=context.config.scanner.workers
         ) as executor:
 
             futures = [
                 executor.submit(
                     self._resolve,
+                    context,
                     host,
                 )
                 for host in hosts

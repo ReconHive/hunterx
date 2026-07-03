@@ -6,26 +6,29 @@ from __future__ import annotations
 
 import uuid
 
-from hunterx.core.dns import DNSPool
+from hunterx.core.context import ScanContext
 
 
 class WildcardDetector:
 
-    def __init__(self) -> None:
-        self.pool = DNSPool()
-
-    def detect(self, target: str) -> bool:
+    def detect(
+        self,
+        context: ScanContext,
+    ) -> bool:
         """
         Return True if wildcard DNS is enabled.
         """
 
         random_host = (
-            f"hunterx-{uuid.uuid4().hex}.{target}"
+            f"hunterx-{uuid.uuid4().hex}.{context.target}"
         )
 
         try:
-            self.pool.resolve(random_host)
+
+            context.dns.resolve(random_host)
+
             return True
 
         except Exception:
+
             return False

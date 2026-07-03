@@ -4,8 +4,7 @@ DNS Records Module
 
 from __future__ import annotations
 
-from hunterx.core.dns import DNSPool
-from hunterx.core.logger import logger
+from hunterx.core.context import ScanContext
 
 
 class DNSRecords:
@@ -13,13 +12,9 @@ class DNSRecords:
     Retrieve DNS records for a target.
     """
 
-    def __init__(self) -> None:
-
-        self.pool = DNSPool()
-
     def lookup(
         self,
-        target: str,
+        context: ScanContext,
     ) -> dict[str, list[str]]:
 
         record_types = [
@@ -35,12 +30,14 @@ class DNSRecords:
 
         for record_type in record_types:
 
-            logger.info(f"{record_type} records")
+            context.logger.info(
+                f"{record_type} records"
+            )
 
             try:
 
-                answers = self.pool.resolver.resolve(
-                    target,
+                answers = context.dns.resolver.resolve(
+                    context.target,
                     record_type,
                 )
 
@@ -52,11 +49,14 @@ class DNSRecords:
                 results[record_type] = values
 
                 for value in values:
-                    logger.success(value)
+
+                    context.logger.success(value)
 
             except Exception:
 
-                logger.warning("Not found")
+                context.logger.warning(
+                    "Not found"
+                )
 
                 results[record_type] = []
 

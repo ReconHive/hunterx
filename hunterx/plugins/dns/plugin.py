@@ -22,13 +22,13 @@ class DNSPlugin(Plugin):
     ) -> None:
 
         ip = self.resolver.resolve(
-            context.target
+            context
         )
 
         context.result.dns.ip = ip
 
         context.result.dns.records = (
             self.records.lookup(
-                context.target
+                context
             )
         )

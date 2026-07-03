@@ -3,9 +3,10 @@ Subdomain Scanner
 """
 
 from __future__ import annotations
+
 import time
 
-from hunterx.core.logger import logger
+from hunterx.core.context import ScanContext
 
 from hunterx.modules.subdomain.wordlist import Wordlist
 from hunterx.modules.subdomain.bruteforce import Bruteforce
@@ -14,7 +15,7 @@ from hunterx.modules.subdomain.wildcard import WildcardDetector
 
 class SubdomainScanner:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         self.wordlist = Wordlist()
 
@@ -22,46 +23,57 @@ class SubdomainScanner:
 
         self.bruteforce = Bruteforce()
 
-    def scan(self, target: str):
-        logger.info("Checking wildcard DNS...")
+    def scan(
+        self,
+        context: ScanContext,
+    ) -> list[str]:
 
-        wildcard = self.detector.detect(target)
+        context.logger.info(
+            "Checking wildcard DNS..."
+        )
+
+        wildcard = self.detector.detect(
+            context
+        )
 
         if wildcard:
 
-            logger.warning(
+            context.logger.warning(
                 "Wildcard DNS detected."
             )
 
         else:
 
-            logger.success(
+            context.logger.success(
                 "Wildcard DNS not detected."
             )
 
-
-        logger.info("Starting subdomain scan...")
+        context.logger.info(
+            "Starting subdomain scan..."
+        )
 
         start = time.perf_counter()
 
         words = self.wordlist.load()
 
         hosts = self.bruteforce.scan(
-            target,
+            context,
             words,
         )
 
-        elapsed = time.perf_counter() - start
+        elapsed = (
+            time.perf_counter() - start
+        )
 
         for host in hosts:
 
-            logger.success(host)
+            context.logger.success(host)
 
-        logger.info(
+        context.logger.info(
             f"Found {len(hosts)} subdomains."
         )
 
-        logger.info(
+        context.logger.info(
             f"Elapsed: {elapsed:.2f}s"
         )
 

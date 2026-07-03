@@ -19,7 +19,7 @@ class SubdomainPlugin(Plugin):
     ) -> None:
 
         hosts = self.scanner.scan(
-            context.target
+            context
         )
 
         context.result.subdomains.hosts = hosts
