@@ -11,10 +11,11 @@ from hunterx.core.dns import DNSPool
 from hunterx.core.http import HTTPPool
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
-
+from hunterx.core.container import ServiceContainer
 
 @dataclass(slots=True)
-class ScanContext:
+class ScanContext: 
+    
     """
     Shared context for every plugin.
     """
@@ -25,8 +26,11 @@ class ScanContext:
 
     result: ScanResult
 
+    container: ServiceContainer
+
     http: HTTPPool
 
     dns: DNSPool
+
 
     logger = logger

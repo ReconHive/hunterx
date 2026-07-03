@@ -5,9 +5,8 @@ HunterX Scan Engine
 from __future__ import annotations
 
 from hunterx.core.config import Config
+from hunterx.core.container import ServiceContainer
 from hunterx.core.context import ScanContext
-from hunterx.core.dns import DNSPool
-from hunterx.core.http import HTTPPool
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.plugins.loader import PluginLoader
@@ -43,16 +42,17 @@ class ScanEngine:
 
         logger.info("Starting scan pipeline...")
 
-        http = HTTPPool(self.config)
-
-        dns = DNSPool(self.config)
+        container = ServiceContainer(
+            self.config,
+        )
 
         context = ScanContext(
             target=target,
             config=self.config,
             result=self.result,
-            http=http,
-            dns=dns,
+            container=container,
+            http=container.http,
+            dns=container.dns,
         )
 
         selected = self.plugins.select(
@@ -65,7 +65,7 @@ class ScanEngine:
                 "No matching plugins were found."
             )
 
-            http.close()
+            container.close()
 
             return
 
@@ -77,6 +77,6 @@ class ScanEngine:
 
             plugin.run(context)
 
-        http.close()
+        container.close()
 
         logger.success("Scan completed.")
