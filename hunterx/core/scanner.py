@@ -5,17 +5,15 @@ HunterX Scan Engine
 from __future__ import annotations
 
 from hunterx.core.logger import logger
-from hunterx.core.module_manager import ModuleManager
 from hunterx.core.result import ScanResult
 
-from hunterx.modules.dns.module import DNSModule
-from hunterx.modules.http.module import HTTPModule
-from hunterx.modules.subdomain.module import (
-    SubdomainModule,
-)
+from hunterx.plugins.loader import PluginLoader
 
 
 class ScanEngine:
+    """
+    Coordinates all plugins.
+    """
 
     def __init__(
         self,
@@ -24,34 +22,26 @@ class ScanEngine:
 
         self.result = result
 
-        self.manager = ModuleManager()
+        loader = PluginLoader()
 
-        self.manager.register(
-            DNSModule()
-        )
-
-        self.manager.register(
-            HTTPModule()
-        )
-
-        self.manager.register(
-            SubdomainModule()
-        )
+        self.registry = loader.load()
 
     def run(
         self,
         target: str,
     ) -> None:
 
-        logger.info(
-            "Starting scan pipeline..."
-        )
+        logger.info("Starting scan pipeline...")
 
-        self.manager.execute(
-            target,
-            self.result,
-        )
+        for plugin in self.registry.plugins():
 
-        logger.success(
-            "Scan completed."
-        )
+            logger.info(
+                f"Running plugin: {plugin.name}"
+            )
+
+            plugin.run(
+                target,
+                self.result,
+            )
+
+        logger.success("Scan completed.")
