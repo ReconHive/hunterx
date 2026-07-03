@@ -53,7 +53,9 @@ class ScanEngine:
 
         self.result.dns.ip = ip
 
-        self.records.lookup(target)
+        records = self.records.lookup(target)
+
+        self.result.dns.records = records
 
     def run_http(self, target: str) -> None:
 

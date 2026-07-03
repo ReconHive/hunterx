@@ -14,9 +14,13 @@ class DNSRecords:
     """
 
     def __init__(self) -> None:
+
         self.pool = DNSPool()
 
-    def lookup(self, target: str) -> None:
+    def lookup(
+        self,
+        target: str,
+    ) -> dict[str, list[str]]:
 
         record_types = [
             "A",
@@ -26,6 +30,8 @@ class DNSRecords:
             "TXT",
             "CNAME",
         ]
+
+        results: dict[str, list[str]] = {}
 
         for record_type in record_types:
 
@@ -38,8 +44,21 @@ class DNSRecords:
                     record_type,
                 )
 
-                for answer in answers:
-                    logger.success(str(answer))
+                values = [
+                    str(answer)
+                    for answer in answers
+                ]
+
+                results[record_type] = values
+
+                for value in values:
+
+                    logger.success(value)
 
             except Exception:
+
                 logger.warning("Not found")
+
+                results[record_type] = []
+
+        return results

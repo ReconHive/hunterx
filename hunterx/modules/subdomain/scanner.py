@@ -64,3 +64,5 @@ class SubdomainScanner:
         logger.info(
             f"Elapsed: {elapsed:.2f}s"
         )
+
+        return hosts

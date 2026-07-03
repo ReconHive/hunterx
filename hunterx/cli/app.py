@@ -1,9 +1,11 @@
+from pathlib import Path
+
 import typer
 from rich.console import Console
-from hunterx.core.application import HunterX
-from hunterx.core.logger import logger
 
 from hunterx.cli.banner import print_banner
+from hunterx.core.application import HunterX
+from hunterx.core.output.manager import OutputManager
 
 app = typer.Typer(
     help="Modern Reconnaissance Framework",
@@ -27,7 +29,14 @@ def version():
     """
     Show HunterX version.
     """
+
     print_banner()
+
+    console.print()
+
+    console.print(
+        "[bold cyan]Version[/bold cyan] : 0.1.0"
+    )
 
 
 @app.command()
@@ -40,18 +49,80 @@ def modules():
 
     console.print()
 
-    console.print("[bold green]Available Modules[/bold green]\n")
+    console.print(
+        "[bold green]Available Modules[/bold green]\n"
+    )
 
-    console.print(" • DNS")
-    console.print(" • HTTP")
-    console.print(" • Port Scanner")
-    console.print(" • Subdomain Enumeration")
-    console.print(" • Screenshot")
-    console.print(" • Report")
+    modules = [
+        "DNS",
+        "HTTP",
+        "Subdomain Enumeration",
+        "Technology Detection",
+        "Security Headers",
+        "Port Scanner (Coming Soon)",
+        "TLS Scanner (Coming Soon)",
+        "Report Generator",
+    ]
+
+    for module in modules:
+
+        console.print(f" • {module}")
+
 
 @app.command()
-def scan(target: str):
+def scan(
+    target: str = typer.Argument(
+        ...,
+        help="Target domain",
+    ),
+    output: str | None = typer.Option(
+        None,
+        "--output",
+        "-o",
+        help="Save report to file (.json/.md)",
+    ),
+):
+    """
+    Scan target.
+    """
+
+    print_banner()
 
     hunter = HunterX()
 
     hunter.run(target)
+
+    if output:
+
+        manager = OutputManager()
+
+        extension = Path(output).suffix.lower()
+
+        formats = {
+            ".json": "json",
+            ".md": "md",
+        }
+
+        fmt = formats.get(extension)
+
+        if fmt is None:
+
+            console.print()
+
+            console.print(
+                "[bold red]Unsupported output format.[/bold red]"
+            )
+
+            raise typer.Exit(code=1)
+
+        manager.write(
+            fmt,
+            hunter.result,
+            output,
+        )
+
+        console.print()
+
+        console.print(
+            f"[bold green]Report saved to[/bold green] {output}"
+        )
