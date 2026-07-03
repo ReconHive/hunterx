@@ -6,32 +6,26 @@ from __future__ import annotations
 
 import re
 
-import httpx
-
+from hunterx.core.context import ScanContext
 from hunterx.core.logger import logger
-
-from hunterx.core.config import Config
 
 
 class HTTPFingerprint:
 
-    def __init__(self) -> None:
+    def analyze(
+        self,
+        context: ScanContext,
+    ) -> None:
 
-        self.config = Config()
+        url = f"https://{context.target}"
 
-    def analyze(self, target: str) -> None:
-
-        url = f"https://{target}"
-
-        logger.info("Analyzing HTTP fingerprint...")
+        logger.info(
+            "Analyzing HTTP fingerprint..."
+        )
 
         try:
 
-            response = httpx.get(
-                url,
-                timeout=self.config.http.timeout,
-                follow_redirects=self.config.http.follow_redirects,
-            )
+            response = context.http.client.get(url)
 
             html = response.text
 
@@ -44,6 +38,7 @@ class HTTPFingerprint:
             )
 
             if match:
+
                 title = match.group(1).strip()
 
             logger.success(f"Title : {title}")
@@ -65,7 +60,9 @@ class HTTPFingerprint:
 
                 if value:
 
-                    logger.success(f"{header} : {value}")
+                    logger.success(
+                        f"{header} : {value}"
+                    )
 
         except Exception as exc:
 

@@ -8,7 +8,7 @@ import time
 
 import httpx
 
-from hunterx.core.config import Config
+from hunterx.core.context import ScanContext
 from hunterx.core.logger import logger
 
 
@@ -17,13 +17,12 @@ class HTTPClient:
     Retrieve basic HTTP information.
     """
 
-    def __init__(self) -> None:
+    def fetch(
+        self,
+        context: ScanContext,
+    ) -> httpx.Response | None:
 
-        self.config = Config()
-
-    def fetch(self, target: str) -> httpx.Response | None:
-
-        url = f"https://{target}"
+        url = f"https://{context.target}"
 
         logger.info(f"Connecting to {url}")
 
@@ -31,21 +30,25 @@ class HTTPClient:
 
         try:
 
-            response = httpx.get(
-                url,
-                timeout=self.config.http.timeout,
-                follow_redirects=self.config.http.follow_redirects,
-            )
+            response = context.http.client.get(url)
 
             elapsed = time.perf_counter() - start
 
             logger.success(f"Status Code : {response.status_code}")
             logger.success(f"Response Time : {elapsed:.2f}s")
 
-            server = response.headers.get("Server", "Unknown")
+            server = response.headers.get(
+                "Server",
+                "Unknown",
+            )
+
             logger.success(f"Server : {server}")
 
-            content = response.headers.get("Content-Type", "Unknown")
+            content = response.headers.get(
+                "Content-Type",
+                "Unknown",
+            )
+
             logger.success(f"Content-Type : {content}")
 
             logger.success(f"Final URL : {response.url}")

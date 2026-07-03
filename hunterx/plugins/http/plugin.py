@@ -21,9 +21,7 @@ class HTTPPlugin(Plugin):
         context: ScanContext,
     ) -> None:
 
-        response = self.client.fetch(
-            context.target
-        )
+        response = self.client.fetch(context)
 
         if response:
 
@@ -41,6 +39,4 @@ class HTTPPlugin(Plugin):
                 response.headers
             )
 
-        self.fingerprint.analyze(
-            context.target
-        )
+        self.fingerprint.analyze(context)
