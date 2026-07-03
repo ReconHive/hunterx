@@ -59,8 +59,10 @@ class ScanEngine:
             events=container.events,
         )
 
+        container.hooks.before_scan(context)
+
         context.events.publish(
-            ScanStarted(target)
+            ScanStarted(target=target)
         )
 
         selected = self.plugins.select(
@@ -79,8 +81,15 @@ class ScanEngine:
 
         for plugin in selected:
 
+            container.hooks.before_plugin(
+                context,
+                plugin,
+            )
+
             context.events.publish(
-                PluginStarted(plugin.name)
+                PluginStarted(
+                    plugin=plugin.name,
+                )
             )
 
             logger.info(
@@ -90,11 +99,24 @@ class ScanEngine:
             plugin.run(context)
 
             context.events.publish(
-                PluginFinished(plugin.name)
+                PluginFinished(
+                    plugin=plugin.name,
+                )
+            )
+
+            container.hooks.after_plugin(
+                context,
+                plugin,
             )
 
         context.events.publish(
-            ScanFinished(target)
+            ScanFinished(
+                target=target,
+            )
+        )
+
+        container.hooks.after_scan(
+            context,
         )
 
         container.close()

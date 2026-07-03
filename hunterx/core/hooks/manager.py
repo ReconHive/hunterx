@@ -4,9 +4,6 @@ from hunterx.core.hooks.base import Hook
 
 
 class HookManager:
-    """
-    Executes lifecycle hooks.
-    """
 
     def __init__(self) -> None:
 
@@ -62,3 +59,7 @@ class HookManager:
                 context,
                 plugin,
             )
+
+    def clear(self) -> None:
+
+        self._hooks.clear()
