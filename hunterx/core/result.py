@@ -4,17 +4,50 @@ HunterX Scan Result Model
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
+
+
+@dataclass(slots=True)
+class DNSResult:
+    ip: str | None = None
+
+    records: dict[str, list[str]] = field(
+        default_factory=dict
+    )
+
+
+@dataclass(slots=True)
+class HTTPResult:
+    status: int | None = None
+
+    server: str | None = None
+
+    title: str | None = None
+
+    url: str | None = None
+
+    headers: dict[str, str] = field(
+        default_factory=dict
+    )
+
+
+@dataclass(slots=True)
+class SubdomainResult:
+    hosts: list[str] = field(
+        default_factory=list
+    )
 
 
 @dataclass(slots=True)
 class ScanResult:
+    dns: DNSResult = field(
+        default_factory=DNSResult
+    )
 
-    dns: dict = field(default_factory=dict)
+    http: HTTPResult = field(
+        default_factory=HTTPResult
+    )
 
-    http: dict = field(default_factory=dict)
-
-    subdomains: list[str] = field(
-        default_factory=list
+    subdomains: SubdomainResult = field(
+        default_factory=SubdomainResult
     )

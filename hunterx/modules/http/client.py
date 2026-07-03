@@ -21,7 +21,7 @@ class HTTPClient:
 
         self.config = Config()
 
-    def fetch(self, target: str) -> None:
+    def fetch(self, target: str) -> httpx.Response | None:
 
         url = f"https://{target}"
 
@@ -50,6 +50,10 @@ class HTTPClient:
 
             logger.success(f"Final URL : {response.url}")
 
+            return response
+
         except Exception as exc:
 
             logger.error(str(exc))
+
+            return None

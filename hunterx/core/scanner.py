@@ -51,13 +51,23 @@ class ScanEngine:
 
         ip = self.resolver.resolve(target)
 
-        self.result.dns["ip"] = ip
+        self.result.dns.ip = ip
 
         self.records.lookup(target)
 
     def run_http(self, target: str) -> None:
 
-        self.http.fetch(target)
+        response = self.http.fetch(target)
+
+        if response:
+
+            self.result.http.status = response.status_code
+
+            self.result.http.server = response.headers.get("Server")
+
+            self.result.http.url = str(response.url)
+
+            self.result.http.headers = dict(response.headers)
 
         self.fingerprint.analyze(target)
 
@@ -65,4 +75,4 @@ class ScanEngine:
 
         hosts = self.subdomain.scan(target)
 
-        self.result.subdomains = hosts
+        self.result.subdomains.hosts = hosts
