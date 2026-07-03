@@ -9,6 +9,7 @@ from hunterx.core.context import ScanContext
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.plugins.loader import PluginLoader
+from hunterx.core.http import HTTPPool
 
 
 class ScanEngine:
@@ -41,10 +42,13 @@ class ScanEngine:
 
         logger.info("Starting scan pipeline...")
 
+        http = HTTPPool(self.config)
+
         context = ScanContext(
             target=target,
             config=self.config,
             result=self.result,
+            http=http,
         )
 
         selected = self.plugins.select(
@@ -67,4 +71,5 @@ class ScanEngine:
 
             plugin.run(context)
 
+        http.close()
         logger.success("Scan completed.")
