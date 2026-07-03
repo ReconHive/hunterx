@@ -59,6 +59,7 @@ class ScanEngine:
             dns=container.dns,
             events=container.events,
             metrics=container.metrics,
+            cache=container.cache,
         )
 
         container.hooks.before_scan(

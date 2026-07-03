@@ -24,34 +24,66 @@ class HTTPClient:
 
         url = f"https://{context.target}"
 
-        logger.info(f"Connecting to {url}")
+        cache_key = f"http:{url}"
+
+        cached = context.cache.get(cache_key)
+
+        if cached:
+
+            logger.info(
+                "HTTP cache hit."
+            )
+
+            return cached
+
+        logger.info(
+            f"Connecting to {url}"
+        )
 
         start = time.perf_counter()
 
         try:
 
-            response = context.http.client.get(url)
+            response = context.http.client.get(
+                url
+            )
+
+            context.cache.set(
+                cache_key,
+                response,
+            )
 
             elapsed = time.perf_counter() - start
 
-            logger.success(f"Status Code : {response.status_code}")
-            logger.success(f"Response Time : {elapsed:.2f}s")
+            logger.success(
+                f"Status Code : {response.status_code}"
+            )
+
+            logger.success(
+                f"Response Time : {elapsed:.2f}s"
+            )
 
             server = response.headers.get(
                 "Server",
                 "Unknown",
             )
 
-            logger.success(f"Server : {server}")
+            logger.success(
+                f"Server : {server}"
+            )
 
             content = response.headers.get(
                 "Content-Type",
                 "Unknown",
             )
 
-            logger.success(f"Content-Type : {content}")
+            logger.success(
+                f"Content-Type : {content}"
+            )
 
-            logger.success(f"Final URL : {response.url}")
+            logger.success(
+                f"Final URL : {response.url}"
+            )
 
             return response
 

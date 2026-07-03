@@ -16,9 +16,18 @@ class DNSResolver:
         self,
         context: ScanContext,
     ) -> str | None:
-        """
-        Resolve an IPv4 address for the target.
-        """
+
+        cache_key = f"dns:{context.target}"
+
+        cached = context.cache.get(cache_key)
+
+        if cached:
+
+            context.logger.info(
+                "DNS cache hit."
+            )
+
+            return cached
 
         context.logger.info(
             f"Resolving {context.target}..."
@@ -31,6 +40,11 @@ class DNSResolver:
             )
 
             ip = answers[0].to_text()
+
+            context.cache.set(
+                cache_key,
+                ip,
+            )
 
             context.logger.success(
                 f"Resolved: {ip}"

@@ -6,7 +6,7 @@ from hunterx.core.events.bus import EventBus
 from hunterx.core.hooks.manager import HookManager
 from hunterx.core.http import HTTPPool
 from hunterx.core.metrics.manager import MetricsManager
-
+from hunterx.core.cache.manager import CacheManager
 
 class ServiceContainer:
 
@@ -38,6 +38,8 @@ class ServiceContainer:
         self.hooks.register(
             MetricsHook()
         )
+
+        self.cache = CacheManager()
 
     def close(self) -> None:
 

@@ -10,6 +10,7 @@ from hunterx.core.http import HTTPPool
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.core.metrics.manager import MetricsManager
+from hunterx.core.cache.manager import CacheManager
 
 
 @dataclass(slots=True)
@@ -33,5 +34,7 @@ class ScanContext:
     events: EventBus
 
     metrics: MetricsManager
+
+    cache: CacheManager
 
     logger = logger
