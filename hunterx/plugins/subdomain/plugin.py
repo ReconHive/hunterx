@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from hunterx.plugins.base import Plugin
-
+from hunterx.core.context import ScanContext
 from hunterx.modules.subdomain.scanner import SubdomainScanner
-from hunterx.core.result import ScanResult
+from hunterx.plugins.base import Plugin
 
 
 class SubdomainPlugin(Plugin):
@@ -16,10 +15,11 @@ class SubdomainPlugin(Plugin):
 
     def run(
         self,
-        target: str,
-        result: ScanResult,
+        context: ScanContext,
     ) -> None:
 
-        hosts = self.scanner.scan(target)
+        hosts = self.scanner.scan(
+            context.target
+        )
 
-        result.subdomains.hosts = hosts
+        context.result.subdomains.hosts = hosts

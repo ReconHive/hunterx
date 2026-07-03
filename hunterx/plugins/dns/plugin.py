@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from hunterx.plugins.base import Plugin
-
-from hunterx.modules.dns.resolver import DNSResolver
+from hunterx.core.context import ScanContext
 from hunterx.modules.dns.records import DNSRecords
-from hunterx.core.result import ScanResult
+from hunterx.modules.dns.resolver import DNSResolver
+from hunterx.plugins.base import Plugin
 
 
 class DNSPlugin(Plugin):
@@ -19,12 +18,17 @@ class DNSPlugin(Plugin):
 
     def run(
         self,
-        target: str,
-        result: ScanResult,
+        context: ScanContext,
     ) -> None:
 
-        ip = self.resolver.resolve(target)
+        ip = self.resolver.resolve(
+            context.target
+        )
 
-        result.dns.ip = ip
+        context.result.dns.ip = ip
 
-        result.dns.records = self.records.lookup(target)
+        context.result.dns.records = (
+            self.records.lookup(
+                context.target
+            )
+        )

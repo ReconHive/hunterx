@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from hunterx.plugins.base import Plugin
-
+from hunterx.core.context import ScanContext
 from hunterx.modules.http.client import HTTPClient
 from hunterx.modules.http.fingerprint import HTTPFingerprint
-from hunterx.core.result import ScanResult
+from hunterx.plugins.base import Plugin
 
 
 class HTTPPlugin(Plugin):
@@ -19,20 +18,29 @@ class HTTPPlugin(Plugin):
 
     def run(
         self,
-        target: str,
-        result: ScanResult,
+        context: ScanContext,
     ) -> None:
 
-        response = self.client.fetch(target)
+        response = self.client.fetch(
+            context.target
+        )
 
         if response:
 
-            result.http.status = response.status_code
+            context.result.http.status = response.status_code
 
-            result.http.server = response.headers.get("Server")
+            context.result.http.server = (
+                response.headers.get("Server")
+            )
 
-            result.http.url = str(response.url)
+            context.result.http.url = str(
+                response.url
+            )
 
-            result.http.headers = dict(response.headers)
+            context.result.http.headers = dict(
+                response.headers
+            )
 
-        self.fingerprint.analyze(target)
+        self.fingerprint.analyze(
+            context.target
+        )

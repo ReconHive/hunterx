@@ -4,9 +4,10 @@ HunterX Scan Engine
 
 from __future__ import annotations
 
+from hunterx.core.config import Config
+from hunterx.core.context import ScanContext
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
-
 from hunterx.plugins.loader import PluginLoader
 
 
@@ -17,8 +18,11 @@ class ScanEngine:
 
     def __init__(
         self,
+        config: Config,
         result: ScanResult,
     ) -> None:
+
+        self.config = config
 
         self.result = result
 
@@ -37,7 +41,15 @@ class ScanEngine:
 
         logger.info("Starting scan pipeline...")
 
-        selected = self.plugins.select(plugins)
+        context = ScanContext(
+            target=target,
+            config=self.config,
+            result=self.result,
+        )
+
+        selected = self.plugins.select(
+            plugins
+        )
 
         if plugins and not selected:
 
@@ -53,9 +65,6 @@ class ScanEngine:
                 f"Running plugin: {plugin.name}"
             )
 
-            plugin.run(
-                target=target,
-                result=self.result,
-            )
+            plugin.run(context)
 
         logger.success("Scan completed.")

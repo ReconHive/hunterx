@@ -4,6 +4,7 @@ from abc import ABC
 from abc import abstractmethod
 
 from hunterx.core.result import ScanResult
+from hunterx.core.context import ScanContext
 
 
 class Plugin(ABC):
@@ -17,7 +18,8 @@ class Plugin(ABC):
     @abstractmethod
     def run(
         self,
-        target: str,
-        result: ScanResult,
+        context: ScanContext,
     ) -> None:
-        ...
+        """
+        Execute plugin.
+        """

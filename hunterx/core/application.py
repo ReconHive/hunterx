@@ -42,9 +42,12 @@ class HunterX:
         if not self.initialized:
             self.initialize()
 
-        engine = ScanEngine(self.result)
+        engine = ScanEngine(
+            config=self.config,
+            result=self.result,
+        )
 
         engine.run(
-            target,
+            target=target,
             plugins=plugins,
         )
