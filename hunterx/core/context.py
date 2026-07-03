@@ -11,6 +11,7 @@ from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.core.metrics.manager import MetricsManager
 from hunterx.core.cache.manager import CacheManager
+from hunterx.core.progress.manager import ProgressManager
 
 
 @dataclass(slots=True)
@@ -36,5 +37,9 @@ class ScanContext:
     metrics: MetricsManager
 
     cache: CacheManager
+
+    progress: ProgressManager
+
+    selected_plugins: list
 
     logger = logger

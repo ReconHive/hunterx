@@ -7,6 +7,7 @@ from hunterx.core.hooks.manager import HookManager
 from hunterx.core.http import HTTPPool
 from hunterx.core.metrics.manager import MetricsManager
 from hunterx.core.cache.manager import CacheManager
+from hunterx.core.progress.manager import ProgressManager
 
 class ServiceContainer:
 
@@ -40,6 +41,14 @@ class ServiceContainer:
         )
 
         self.cache = CacheManager()
+
+        self.progress = ProgressManager()
+
+        from hunterx.core.progress.hook import ProgressHook
+
+        self.hooks.register(
+            ProgressHook()
+        )
 
     def close(self) -> None:
 

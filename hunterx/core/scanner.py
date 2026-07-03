@@ -50,6 +50,10 @@ class ScanEngine:
             LoggerHook()
         )
 
+        selected = self.plugins.select(
+            plugins
+        )
+
         context = ScanContext(
             target=target,
             config=self.config,
@@ -59,7 +63,9 @@ class ScanEngine:
             dns=container.dns,
             events=container.events,
             metrics=container.metrics,
+            progress=container.progress,
             cache=container.cache,
+            selected_plugins=selected,
         )
 
         container.hooks.before_scan(
