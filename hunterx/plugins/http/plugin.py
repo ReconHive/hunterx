@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from hunterx.core.context import ScanContext
 from hunterx.modules.http.client import HTTPClient
+from hunterx.modules.http.cookies import HTTPCookiesAnalyzer
 from hunterx.modules.http.fingerprint import HTTPFingerprint
-from hunterx.plugins.base import Plugin
-from hunterx.modules.http.technologies import TechnologyDetector
 from hunterx.modules.http.security import HTTPSecurityAnalyzer
+from hunterx.modules.http.technologies import TechnologyDetector
+from hunterx.plugins.base import Plugin
+
 
 class HTTPPlugin(Plugin):
 
@@ -20,6 +22,8 @@ class HTTPPlugin(Plugin):
         self.technologies = TechnologyDetector()
 
         self.security = HTTPSecurityAnalyzer()
+
+        self.cookies = HTTPCookiesAnalyzer()
 
     def run(
         self,
@@ -58,11 +62,16 @@ class HTTPPlugin(Plugin):
             security
         )
 
-        technologies = (
-            self.technologies.analyze(
-                context,
-                response,
-            )
+        cookies = self.cookies.analyze(
+            context,
+            response,
+        )
+
+        context.result.http.cookies = cookies
+
+        technologies = self.technologies.analyze(
+            context,
+            response,
         )
 
         if technologies:

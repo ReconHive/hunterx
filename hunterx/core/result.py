@@ -26,7 +26,7 @@ class HTTPResult:
 
     title: str | None = None
 
-    url: str |None = None
+    url: str | None = None
 
     headers: dict[str, str] = field(
         default_factory=dict
@@ -38,6 +38,10 @@ class HTTPResult:
 
     security_headers: dict[str, str] = field(
         default_factory=dict
+    )
+
+    cookies: list[dict] = field(
+        default_factory=list
     )
 
 
