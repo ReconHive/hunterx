@@ -39,6 +39,7 @@ class HunterX:
         plugins: list[str] | None = None,
         custom_headers: dict[str, str] | None = None,
         method: str = "GET",
+        depth: int | None = None,
     ) -> None:
 
         if not self.initialized:
@@ -48,6 +49,9 @@ class HunterX:
             config=self.config,
             result=self.result,
         )
+
+        if depth is not None:
+            self.config.crawler.depth = depth
 
         engine.run(
             target=target,

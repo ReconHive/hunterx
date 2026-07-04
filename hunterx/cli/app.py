@@ -111,6 +111,11 @@ def scan(
         "-X",
         help="HTTP request method",
     ),
+    depth: int = typer.Option(
+        2,
+        "--depth",
+        help="Crawler depth",
+    ),
 ) -> None:
     """
     Scan target.
@@ -126,6 +131,8 @@ def scan(
 
     if threads is not None:
         hunter.config.scanner.workers = threads
+
+    hunter.config.crawler.depth = depth
 
     selected_plugins: list[str] | None = None
 
@@ -144,7 +151,6 @@ def scan(
         for header in headers:
 
             if ":" not in header:
-
                 continue
 
             key, value = header.split(
