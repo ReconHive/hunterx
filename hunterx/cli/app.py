@@ -121,6 +121,12 @@ def scan(
         "--wordlist",
         help="Custom directory wordlist",
     ),
+    extensions: str | None = typer.Option(
+        None,
+        "--extensions",
+        "-x",
+        help="File extensions. Example: php,txt,bak",
+    ),
 ) -> None:
     """
     Scan target.
@@ -129,6 +135,18 @@ def scan(
     print_banner()
 
     hunter = HunterX()
+
+    if extensions:
+
+        hunter.config.directory.extensions = [
+
+            ext.strip().lstrip(".")
+
+            for ext in extensions.split(",")
+
+            if ext.strip()
+
+        ]
 
     if timeout is not None:
         hunter.config.http.timeout = timeout

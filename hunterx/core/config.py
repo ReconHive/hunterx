@@ -71,6 +71,10 @@ class DirectoryConfig:
     
     wordlist: str | None = None
 
+    extensions: list[str] = field(
+        default_factory=list,
+    )
+
 
 @dataclass(slots=True)
 class Config:

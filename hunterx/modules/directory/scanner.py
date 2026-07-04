@@ -66,7 +66,19 @@ class DirectoryScanner:
 
         discovered: list[str] = []
 
+        targets: list[str] = []
+
         for word in words:
+
+            targets.append(word)
+
+            if "." in word:
+                continue
+
+            for ext in config.extensions:
+                targets.append(f"{word}.{ext}")
+
+        for word in targets:
 
             url = f"{base}/{word}"
 
