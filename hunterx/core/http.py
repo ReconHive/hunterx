@@ -10,6 +10,7 @@ from hunterx.core.config import Config
 
 
 class HTTPPool:
+
     """
     Shared HTTP client.
     """
@@ -25,6 +26,23 @@ class HTTPPool:
             http2=True,
         )
 
-    def close(self) -> None:
+    def set_headers(
+        self,
+        headers: dict[str, str],
+    ) -> None:
+
+        self.client.headers.update(
+            headers
+        )
+
+    def clear_headers(
+        self,
+    ) -> None:
+
+        self.client.headers.clear()
+
+    def close(
+        self,
+    ) -> None:
 
         self.client.close()

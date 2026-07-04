@@ -42,4 +42,6 @@ class ScanContext:
 
     selected_plugins: list
 
+    custom_headers: dict[str, str]
+
     logger = logger

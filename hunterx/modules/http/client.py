@@ -30,15 +30,34 @@ class HTTPClient:
 
         if cached:
 
-            logger.info(
-                "HTTP cache hit."
-            )
+            logger.info("HTTP cache hit.")
 
             return cached
 
+        context.http.clear_headers()
+
+        if context.custom_headers:
+
+            context.http.set_headers(
+                context.custom_headers
+            )
+
+        logger.info("")
+        logger.info("Request")
         logger.info(
-            f"Connecting to {url}"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
+
+        logger.success("Method : GET")
+        logger.success(f"URL : {url}")
+
+        for key, value in (
+            context.http.client.headers.items()
+        ):
+
+            logger.success(
+                f"{key}: {value}"
+            )
 
         start = time.perf_counter()
 
@@ -48,42 +67,50 @@ class HTTPClient:
                 url
             )
 
+            elapsed = (
+                time.perf_counter() - start
+            )
+
             context.cache.set(
                 cache_key,
                 response,
             )
 
-            elapsed = time.perf_counter() - start
-
-            logger.success(
-                f"Status Code : {response.status_code}"
+            logger.info("")
+            logger.info("Response")
+            logger.info(
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
             logger.success(
-                f"Response Time : {elapsed:.2f}s"
-            )
-
-            server = response.headers.get(
-                "Server",
-                "Unknown",
+                f"Status : {response.status_code} {response.reason_phrase}"
             )
 
             logger.success(
-                f"Server : {server}"
-            )
-
-            content = response.headers.get(
-                "Content-Type",
-                "Unknown",
+                f"Elapsed : {elapsed:.2f}s"
             )
 
             logger.success(
-                f"Content-Type : {content}"
+                f"Size : {len(response.content)} bytes"
             )
 
             logger.success(
                 f"Final URL : {response.url}"
             )
+
+            logger.info("")
+            logger.info("Response Headers")
+            logger.info(
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            )
+
+            for key, value in (
+                response.headers.items()
+            ):
+
+                logger.success(
+                    f"{key}: {value}"
+                )
 
             return response
 

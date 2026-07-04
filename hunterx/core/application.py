@@ -37,6 +37,7 @@ class HunterX:
         self,
         target: str,
         plugins: list[str] | None = None,
+        custom_headers: dict[str, str] | None = None,
     ) -> None:
 
         if not self.initialized:
@@ -50,4 +51,5 @@ class HunterX:
         engine.run(
             target=target,
             plugins=plugins,
+            custom_headers=custom_headers,
         )

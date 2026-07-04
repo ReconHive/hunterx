@@ -99,6 +99,12 @@ def scan(
         "--threads",
         help="Worker threads",
     ),
+    headers: list[str] = typer.Option(
+        None,
+        "--header",
+        "-H",
+        help="Custom HTTP header",
+    ),
 ) -> None:
     """
     Scan target.
@@ -125,9 +131,29 @@ def scan(
             if plugin.strip()
         ]
 
+    custom_headers: dict[str, str] = {}
+
+    if headers:
+
+        for header in headers:
+
+            if ":" not in header:
+
+                continue
+
+            key, value = header.split(
+                ":",
+                1,
+            )
+
+            custom_headers[
+                key.strip()
+            ] = value.strip()
+
     hunter.run(
         target=target,
         plugins=selected_plugins,
+        custom_headers=custom_headers,
     )
 
     if output is None:
