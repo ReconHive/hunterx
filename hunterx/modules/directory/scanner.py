@@ -6,21 +6,12 @@ from hunterx.modules.directory.wordlist import DEFAULT_WORDLIST
 
 class DirectoryScanner:
 
-    VALID_STATUS = {
-        200,
-        204,
-        301,
-        302,
-        307,
-        308,
-        401,
-        403,
-    }
-
     def scan(
         self,
         context: ScanContext,
     ) -> list[str]:
+
+        config = context.config.directory
 
         base = f"https://{context.target}".rstrip("/")
 
@@ -34,13 +25,16 @@ class DirectoryScanner:
 
                 response = context.http.client.get(
                     url,
-                    follow_redirects=False,
+                    follow_redirects=config.follow_redirects,
                 )
 
             except Exception:
                 continue
 
-            if response.status_code not in self.VALID_STATUS:
+            if response.status_code not in config.include_status:
+                continue
+
+            if response.status_code in config.exclude_status:
                 continue
 
             line = f"[{response.status_code}] {url}"
@@ -48,6 +42,7 @@ class DirectoryScanner:
             location = response.headers.get("Location")
 
             if location:
+
                 line += f" -> {location}"
 
             discovered.append(line)

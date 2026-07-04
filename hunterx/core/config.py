@@ -50,41 +50,24 @@ class CrawlerConfig:
 
     internal_only: bool = True
 
+
 @dataclass(slots=True)
 class DirectoryConfig:
 
-    threads: int = 30
+    follow_redirects: bool = False
 
-    timeout: float = 5.0
-
-    extensions: list[str] = field(
-        default_factory=lambda: [
-            "",
-            ".php",
-            ".asp",
-            ".aspx",
-            ".jsp",
-            ".html",
-        ]
+    include_status: tuple[int, ...] = (
+        200,
+        204,
+        301,
+        302,
+        307,
+        308,
+        401,
+        403,
     )
 
-    status_codes: set[int] = field(
-        default_factory=lambda: {
-            200,
-            204,
-            301,
-            302,
-            307,
-            401,
-            403,
-        }
-    )
-
-    max_words: int = 500
-
-
-
-
+    exclude_status: tuple[int, ...] = ()
 
 
 @dataclass(slots=True)
@@ -104,4 +87,8 @@ class Config:
 
     crawler: CrawlerConfig = field(
         default_factory=CrawlerConfig
+    )
+
+    directory: DirectoryConfig = field(
+        default_factory=DirectoryConfig
     )
