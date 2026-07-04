@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from hunterx.core.context import ScanContext
 from hunterx.modules.directory.wordlist import DEFAULT_WORDLIST
 
@@ -15,9 +17,56 @@ class DirectoryScanner:
 
         base = f"https://{context.target}".rstrip("/")
 
+        #
+        # Load wordlist
+        #
+
+        words = DEFAULT_WORDLIST
+
+        if config.wordlist:
+
+            path = Path(config.wordlist).expanduser()
+
+            if not path.is_absolute():
+                path = Path.cwd() / path
+
+            if path.exists() and path.is_file():
+
+                try:
+
+                    words = [
+                        line.strip()
+                        for line in path.read_text(
+                            encoding="utf-8",
+                            errors="ignore",
+                        ).splitlines()
+                        if line.strip()
+                        and not line.startswith("#")
+                    ]
+
+                    context.logger.success(
+                        f"Loaded {len(words)} words from {path}"
+                    )
+
+                except Exception as exc:
+
+                    context.logger.warning(
+                        f"Failed to read wordlist: {exc}"
+                    )
+
+            else:
+
+                context.logger.warning(
+                    f"Wordlist not found: {path}"
+                )
+
+        #
+        # Scan
+        #
+
         discovered: list[str] = []
 
-        for word in DEFAULT_WORDLIST:
+        for word in words:
 
             url = f"{base}/{word}"
 
@@ -42,7 +91,6 @@ class DirectoryScanner:
             location = response.headers.get("Location")
 
             if location:
-
                 line += f" -> {location}"
 
             discovered.append(line)

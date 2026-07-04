@@ -116,6 +116,11 @@ def scan(
         "--depth",
         help="Crawler depth",
     ),
+    wordlist: str | None = typer.Option(
+        None,
+        "--wordlist",
+        help="Custom directory wordlist",
+    ),
 ) -> None:
     """
     Scan target.
@@ -167,6 +172,7 @@ def scan(
         plugins=selected_plugins,
         custom_headers=custom_headers,
         method=method,
+        wordlist=wordlist,
     )
 
     if output is None:

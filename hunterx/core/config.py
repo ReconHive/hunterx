@@ -68,6 +68,8 @@ class DirectoryConfig:
     )
 
     exclude_status: tuple[int, ...] = ()
+    
+    wordlist: str | None = None
 
 
 @dataclass(slots=True)
@@ -90,5 +92,5 @@ class Config:
     )
 
     directory: DirectoryConfig = field(
-        default_factory=DirectoryConfig
+        default_factory=DirectoryConfig,
     )

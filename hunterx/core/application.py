@@ -40,6 +40,7 @@ class HunterX:
         custom_headers: dict[str, str] | None = None,
         method: str = "GET",
         depth: int | None = None,
+        wordlist: str | None = None,
     ) -> None:
 
         if not self.initialized:
@@ -52,6 +53,9 @@ class HunterX:
 
         if depth is not None:
             self.config.crawler.depth = depth
+
+        if wordlist is not None:
+            self.config.directory.wordlist = wordlist
 
         engine.run(
             target=target,
