@@ -56,6 +56,14 @@ class DirectoryConfig:
 
     follow_redirects: bool = False
 
+    wordlist: str | None = None
+
+    threads: int | None = None
+
+    extensions: list[str] = field(
+        default_factory=list,
+    )
+
     include_status: tuple[int, ...] = (
         200,
         204,
@@ -68,12 +76,6 @@ class DirectoryConfig:
     )
 
     exclude_status: tuple[int, ...] = ()
-    
-    wordlist: str | None = None
-
-    extensions: list[str] = field(
-        default_factory=list,
-    )
 
 
 @dataclass(slots=True)

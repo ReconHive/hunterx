@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from hunterx.core.context import ScanContext
@@ -61,10 +62,8 @@ class DirectoryScanner:
                 )
 
         #
-        # Scan
+        # Build targets
         #
-
-        discovered: list[str] = []
 
         targets: list[str] = []
 
@@ -72,15 +71,29 @@ class DirectoryScanner:
 
             targets.append(word)
 
-            if "." in word:
-                continue
+            if "." not in word:
 
-            for ext in config.extensions:
-                targets.append(f"{word}.{ext}")
+                for ext in config.extensions:
 
-        for word in targets:
+                    targets.append(
+                        f"{word}.{ext}"
+                    )
 
-            url = f"{base}/{word}"
+        #
+        # Worker count
+        #
+
+        workers = (
+            config.threads
+            if config.threads is not None
+            else context.config.scanner.workers
+        )
+
+        discovered: list[str] = []
+
+        def request(path: str) -> str | None:
+
+            url = f"{base}/{path}"
 
             try:
 
@@ -90,21 +103,54 @@ class DirectoryScanner:
                 )
 
             except Exception:
-                continue
+                return None
 
             if response.status_code not in config.include_status:
-                continue
+                return None
 
             if response.status_code in config.exclude_status:
-                continue
+                return None
 
             line = f"[{response.status_code}] {url}"
 
-            location = response.headers.get("Location")
+            location = response.headers.get(
+                "Location"
+            )
 
             if location:
+
                 line += f" -> {location}"
 
-            discovered.append(line)
+            return line
+
+        #
+        # Multithreaded scan
+        #
+
+        with ThreadPoolExecutor(
+            max_workers=workers,
+        ) as executor:
+
+            futures = [
+                executor.submit(
+                    request,
+                    target,
+                )
+                for target in targets
+            ]
+
+            for future in as_completed(
+                futures,
+            ):
+
+                result = future.result()
+
+                if result is not None:
+
+                    discovered.append(
+                        result
+                    )
+
+        discovered.sort()
 
         return discovered

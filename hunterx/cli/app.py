@@ -127,6 +127,12 @@ def scan(
         "-x",
         help="File extensions. Example: php,txt,bak",
     ),
+    dir_threads: int | None = typer.Option(
+        None,
+        "--dir-threads",
+        help="Override worker threads for directory scanner",
+    ),
+
 ) -> None:
     """
     Scan target.
@@ -152,8 +158,21 @@ def scan(
         hunter.config.http.timeout = timeout
         hunter.config.dns.timeout = timeout
 
+    #
+    # Global workers
+    #
+
     if threads is not None:
+
         hunter.config.scanner.workers = threads
+
+    #
+    # Directory override
+    #
+
+    if dir_threads is not None:
+
+        hunter.config.directory.threads = dir_threads
 
     hunter.config.crawler.depth = depth
 
