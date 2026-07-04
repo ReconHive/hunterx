@@ -5,18 +5,31 @@ from hunterx.core.plugins import PluginCollection
 from hunterx.plugins.dns.plugin import DNSPlugin
 from hunterx.plugins.http.plugin import HTTPPlugin
 from hunterx.plugins.subdomain.plugin import SubdomainPlugin
+from hunterx.plugins.crawler.crawler import CrawlerPlugin
 
 
 class PluginLoader:
 
-    def load(self) -> PluginCollection:
+    def load(
+        self,
+    ) -> PluginCollection:
 
         plugins = PluginCollection()
 
-        plugins.register(DNSPlugin())
+        plugins.register(
+            DNSPlugin()
+        )
 
-        plugins.register(HTTPPlugin())
+        plugins.register(
+            HTTPPlugin()
+        )
 
-        plugins.register(SubdomainPlugin())
+        plugins.register(
+            SubdomainPlugin()
+        )
+
+        plugins.register(
+            CrawlerPlugin()
+        )
 
         return plugins

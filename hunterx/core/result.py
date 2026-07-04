@@ -58,6 +58,13 @@ class SubdomainResult:
 
 
 @dataclass(slots=True)
+class CrawlerResult:
+
+    urls: list[str] = field(
+        default_factory=list
+    )
+
+@dataclass(slots=True)
 class ScanResult:
 
     dns: DNSResult = field(
@@ -70,4 +77,8 @@ class ScanResult:
 
     subdomains: SubdomainResult = field(
         default_factory=SubdomainResult
+    )
+
+    crawler: CrawlerResult = field(
+        default_factory=CrawlerResult
     )
