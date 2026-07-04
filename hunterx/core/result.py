@@ -64,6 +64,14 @@ class CrawlerResult:
         default_factory=list
     )
 
+    robots: list[str] = field(
+        default_factory=list
+    )
+
+    sitemap: list[str] = field(
+        default_factory=list
+    )
+
 @dataclass(slots=True)
 class ScanResult:
 

@@ -1,54 +1,132 @@
 from __future__ import annotations
 
-from hunterx.core.context import ScanContext
+from collections import deque
+from urllib.parse import urljoin
+from urllib.parse import urlparse
 
-from hunterx.modules.crawler.extractor import LinkExtractor
-from hunterx.modules.crawler.normalizer import URLNormalizer
+from bs4 import BeautifulSoup
+
+from hunterx.core.context import ScanContext
 
 
 class WebCrawler:
-
-    def __init__(self):
-
-        self.extractor = LinkExtractor()
-
-        self.normalizer = URLNormalizer()
 
     def crawl(
         self,
         context: ScanContext,
     ) -> list[str]:
 
-        url = f"https://{context.target}"
+        config = context.config.crawler
 
-        response = context.http.client.get(
-            url,
-        )
+        root = f"https://{context.target}"
 
-        html = response.text
+        queue = deque()
 
-        links = self.extractor.extract(
-            html,
-        )
-
-        found: set[str] = set()
-
-        for link in links:
-
-            normalized = self.normalizer.normalize(
-                url,
-                link,
+        queue.append(
+            (
+                root,
+                0,
             )
+        )
 
-            if not self.normalizer.same_origin(
-                url,
-                normalized,
+        visited: set[str] = set()
+
+        discovered: set[str] = set()
+
+        while queue:
+
+            url, depth = queue.popleft()
+
+            if url in visited:
+
+                continue
+
+            visited.add(url)
+
+            if depth > config.depth:
+
+                continue
+
+            if len(visited) >= config.max_pages:
+
+                break
+
+            try:
+
+                response = context.http.client.get(
+                    url
+                )
+
+            except Exception:
+
+                continue
+
+            content_type = response.headers.get(
+                "Content-Type",
+                "",
+            ).lower()
+
+            if (
+                "text/html" not in content_type
+                and
+                "application/xhtml+xml"
+                not in content_type
             ):
 
                 continue
 
-            found.add(
-                normalized
+            soup = BeautifulSoup(
+                response.text,
+                "html.parser",
             )
 
-        return sorted(found)
+            for tag in soup.find_all(
+                "a",
+                href=True,
+            ):
+
+                href = tag["href"]
+
+                absolute = urljoin(
+                    url,
+                    href,
+                )
+
+                absolute = absolute.split(
+                    "#",
+                )[0]
+
+                parsed = urlparse(
+                    absolute,
+                )
+
+                if parsed.scheme not in (
+                    "http",
+                    "https",
+                ):
+
+                    continue
+
+                if (
+                    config.internal_only
+                    and parsed.netloc != context.target
+                ):
+
+                    continue
+
+                if absolute not in discovered:
+
+                    discovered.add(
+                        absolute,
+                    )
+
+                    queue.append(
+                        (
+                            absolute,
+                            depth + 1,
+                        )
+                    )
+
+        return sorted(
+            discovered,
+        )

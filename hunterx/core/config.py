@@ -40,6 +40,18 @@ class HTTPConfig:
 
 
 @dataclass(slots=True)
+class CrawlerConfig:
+
+    depth: int = 2
+
+    max_pages: int = 100
+
+    follow_redirects: bool = True
+
+    internal_only: bool = True
+
+
+@dataclass(slots=True)
 class Config:
 
     dns: DNSConfig = field(
@@ -52,4 +64,8 @@ class Config:
 
     http: HTTPConfig = field(
         default_factory=HTTPConfig
+    )
+
+    crawler: CrawlerConfig = field(
+        default_factory=CrawlerConfig
     )
