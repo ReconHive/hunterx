@@ -72,6 +72,15 @@ class CrawlerResult:
         default_factory=list
     )
 
+
+@dataclass(slots=True)
+class DirectoryResult:
+
+    paths: list[str] = field(
+        default_factory=list
+    )
+
+
 @dataclass(slots=True)
 class ScanResult:
 
@@ -89,4 +98,8 @@ class ScanResult:
 
     crawler: CrawlerResult = field(
         default_factory=CrawlerResult
+    )
+
+    directory: DirectoryResult = field(
+        default_factory=DirectoryResult
     )

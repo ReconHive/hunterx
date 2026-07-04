@@ -50,6 +50,42 @@ class CrawlerConfig:
 
     internal_only: bool = True
 
+@dataclass(slots=True)
+class DirectoryConfig:
+
+    threads: int = 30
+
+    timeout: float = 5.0
+
+    extensions: list[str] = field(
+        default_factory=lambda: [
+            "",
+            ".php",
+            ".asp",
+            ".aspx",
+            ".jsp",
+            ".html",
+        ]
+    )
+
+    status_codes: set[int] = field(
+        default_factory=lambda: {
+            200,
+            204,
+            301,
+            302,
+            307,
+            401,
+            403,
+        }
+    )
+
+    max_words: int = 500
+
+
+
+
+
 
 @dataclass(slots=True)
 class Config:

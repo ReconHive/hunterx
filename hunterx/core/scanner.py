@@ -149,3 +149,14 @@ class ScanEngine:
             )
 
         container.close()
+
+
+
+class DirectoryScanner:
+
+    def scan(
+        self,
+        context: ScanContext,
+    ) -> list[str]:
+
+        ...

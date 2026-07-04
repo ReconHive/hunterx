@@ -6,7 +6,7 @@ from hunterx.plugins.dns.plugin import DNSPlugin
 from hunterx.plugins.http.plugin import HTTPPlugin
 from hunterx.plugins.subdomain.plugin import SubdomainPlugin
 from hunterx.plugins.crawler.crawler import CrawlerPlugin
-
+from hunterx.plugins.directory.plugin import DirectoryPlugin
 
 class PluginLoader:
 
@@ -30,6 +30,10 @@ class PluginLoader:
 
         plugins.register(
             CrawlerPlugin()
+        )
+
+        plugins.register(
+            DirectoryPlugin()
         )
 
         return plugins
