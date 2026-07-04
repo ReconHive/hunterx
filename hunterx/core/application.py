@@ -38,6 +38,7 @@ class HunterX:
         target: str,
         plugins: list[str] | None = None,
         custom_headers: dict[str, str] | None = None,
+        method: str = "GET",
     ) -> None:
 
         if not self.initialized:
@@ -52,4 +53,5 @@ class HunterX:
             target=target,
             plugins=plugins,
             custom_headers=custom_headers,
+            method=method,
         )

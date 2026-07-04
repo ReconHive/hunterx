@@ -44,4 +44,6 @@ class ScanContext:
 
     custom_headers: dict[str, str]
 
+    method: str = "GET"
+
     logger = logger

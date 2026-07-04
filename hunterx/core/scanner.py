@@ -41,6 +41,7 @@ class ScanEngine:
         target: str,
         plugins: list[str] | None = None,
         custom_headers: dict[str, str] | None = None,
+        method: str = "GET",
     ) -> None:
 
         container = ServiceContainer(
@@ -68,6 +69,7 @@ class ScanEngine:
             cache=container.cache,
             selected_plugins=selected,
             custom_headers=custom_headers or {},
+            method=method.upper(),
         )
 
         container.hooks.before_scan(

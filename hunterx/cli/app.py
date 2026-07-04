@@ -105,6 +105,12 @@ def scan(
         "-H",
         help="Custom HTTP header",
     ),
+    method: str = typer.Option(
+        "GET",
+        "--method",
+        "-X",
+        help="HTTP request method",
+    ),
 ) -> None:
     """
     Scan target.
@@ -154,6 +160,7 @@ def scan(
         target=target,
         plugins=selected_plugins,
         custom_headers=custom_headers,
+        method=method,
     )
 
     if output is None:

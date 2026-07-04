@@ -44,6 +44,10 @@ class HTTPResult:
         default_factory=list
     )
 
+    cors: dict[str, str] = field(
+        default_factory=dict
+    )
+
 
 @dataclass(slots=True)
 class SubdomainResult:

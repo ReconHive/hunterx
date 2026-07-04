@@ -7,7 +7,7 @@ from hunterx.modules.http.fingerprint import HTTPFingerprint
 from hunterx.modules.http.security import HTTPSecurityAnalyzer
 from hunterx.modules.http.technologies import TechnologyDetector
 from hunterx.plugins.base import Plugin
-
+from hunterx.modules.http.cors import HTTPCORSAnalyzer
 
 class HTTPPlugin(Plugin):
 
@@ -24,6 +24,8 @@ class HTTPPlugin(Plugin):
         self.security = HTTPSecurityAnalyzer()
 
         self.cookies = HTTPCookiesAnalyzer()
+
+        self.cors = HTTPCORSAnalyzer()
 
     def run(
         self,
@@ -57,6 +59,13 @@ class HTTPPlugin(Plugin):
             context,
             response,
         )
+
+        cors = self.cors.analyze(
+            context,
+            response,
+        )
+
+        context.result.http.cors = cors
 
         context.result.http.security_headers = (
             security

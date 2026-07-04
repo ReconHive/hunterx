@@ -48,7 +48,7 @@ class HTTPClient:
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
 
-        logger.success("Method : GET")
+        logger.success(f"Method : {context.method}")
         logger.success(f"URL : {url}")
 
         for key, value in (
@@ -63,8 +63,9 @@ class HTTPClient:
 
         try:
 
-            response = context.http.client.get(
-                url
+            response = context.http.client.request(
+                method=context.method,
+                url=url,
             )
 
             elapsed = (
