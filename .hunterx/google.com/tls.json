@@ -77,5 +77,8 @@
     "self_signed": false,
     "wildcard": true,
     "serial": "26DA90991E0F8D9A12332701A929C3EE",
-    "signature_algorithm": null
+    "signature_algorithm": null,
+    "findings": [
+        "Wildcard Certificate"
+    ]
 }

@@ -59,6 +59,8 @@ class TLSPlugin(Plugin):
         context.result.tls.serial = result["serial"]
 
         context.result.tls.signature_algorithm = result["signature_algorithm"]
+        
+        context.result.tls.findings = result["findings"]
 
         context.logger.success(
             f"TLS Version : {result['version']}"
@@ -101,6 +103,22 @@ class TLSPlugin(Plugin):
             context.logger.error(
                 "Certificate Expired"
             )
+
+        if result["findings"]:
+
+            context.logger.info(
+                ""
+            )
+
+            context.logger.info(
+                "TLS Findings"
+            )
+
+            for finding in result["findings"]:
+
+                context.logger.warning(
+                    f"- {finding}"
+                )
 
         self.save_workspace(
             context,

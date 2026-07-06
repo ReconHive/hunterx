@@ -128,6 +128,10 @@ class TLSResult:
 
     signature_algorithm: str | None = None
 
+    findings: list[str] = field(          # <-- این فیلد اضافه شد
+        default_factory=list,
+    )
+
 
 @dataclass(slots=True)
 class ScanResult:
@@ -158,4 +162,8 @@ class ScanResult:
 
     tls: TLSResult = field(
         default_factory=TLSResult,
+    )
+
+    findings: list[str] = field(
+        default_factory=list,
     )

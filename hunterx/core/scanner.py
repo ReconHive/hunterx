@@ -19,6 +19,7 @@ from hunterx.core.result import ScanResult
 from hunterx.plugins.loader import PluginLoader
 
 
+
 class ScanEngine:
     """
     Coordinates all plugins.
