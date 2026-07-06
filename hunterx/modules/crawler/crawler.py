@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from collections import deque
+from queue import Queue
+from threading import Lock
+from threading import Thread
 from urllib.parse import urljoin
 from urllib.parse import urlparse
 
@@ -18,11 +20,13 @@ class WebCrawler:
 
         config = context.config.crawler
 
+        workers = context.config.scanner.workers
+
         root = f"https://{context.target}"
 
-        queue = deque()
+        queue: Queue[tuple[str, int] | None] = Queue()
 
-        queue.append(
+        queue.put(
             (
                 root,
                 0,
@@ -33,99 +37,135 @@ class WebCrawler:
 
         discovered: set[str] = set()
 
-        while queue:
+        lock = Lock()
 
-            url, depth = queue.popleft()
+        def worker() -> None:
 
-            if url in visited:
+            while True:
 
-                continue
+                item = queue.get()
 
-            visited.add(url)
+                if item is None:
 
-            if depth > config.depth:
+                    queue.task_done()
 
-                continue
+                    break
 
-            if len(visited) >= config.max_pages:
+                url, depth = item
 
-                break
+                try:
 
-            try:
+                    with lock:
 
-                response = context.http.client.get(
-                    url
-                )
+                        if url in visited:
+                            continue
 
-            except Exception:
+                        if len(visited) >= config.max_pages:
+                            continue
 
-                continue
+                        visited.add(url)
 
-            content_type = response.headers.get(
-                "Content-Type",
-                "",
-            ).lower()
+                    if depth > config.depth:
+                        continue
 
-            if (
-                "text/html" not in content_type
-                and
-                "application/xhtml+xml"
-                not in content_type
-            ):
+                    try:
 
-                continue
+                        response = context.http.client.get(
+                            url,
+                        )
 
-            soup = BeautifulSoup(
-                response.text,
-                "html.parser",
+                    except Exception:
+                        continue
+
+                    content_type = response.headers.get(
+                        "Content-Type",
+                        "",
+                    ).lower()
+
+                    if (
+                        "text/html" not in content_type
+                        and
+                        "application/xhtml+xml" not in content_type
+                    ):
+                        continue
+
+                    soup = BeautifulSoup(
+                        response.text,
+                        "html.parser",
+                    )
+
+                    for tag in soup.find_all(
+                        "a",
+                        href=True,
+                    ):
+
+                        href = tag["href"]
+
+                        absolute = urljoin(
+                            url,
+                            href,
+                        ).split("#")[0]
+
+                        parsed = urlparse(
+                            absolute,
+                        )
+
+                        if parsed.scheme not in (
+                            "http",
+                            "https",
+                        ):
+                            continue
+
+                        if (
+                            config.internal_only
+                            and parsed.netloc != context.target
+                        ):
+                            continue
+
+                        with lock:
+
+                            if absolute in discovered:
+                                continue
+
+                            discovered.add(
+                                absolute,
+                            )
+
+                        queue.put(
+                            (
+                                absolute,
+                                depth + 1,
+                            )
+                        )
+
+                finally:
+
+                    queue.task_done()
+
+        threads: list[Thread] = []
+
+        for _ in range(workers):
+
+            thread = Thread(
+                target=worker,
+                daemon=True,
             )
 
-            for tag in soup.find_all(
-                "a",
-                href=True,
-            ):
+            thread.start()
 
-                href = tag["href"]
+            threads.append(
+                thread,
+            )
 
-                absolute = urljoin(
-                    url,
-                    href,
-                )
+        queue.join()
 
-                absolute = absolute.split(
-                    "#",
-                )[0]
+        for _ in range(workers):
 
-                parsed = urlparse(
-                    absolute,
-                )
+            queue.put(None)
 
-                if parsed.scheme not in (
-                    "http",
-                    "https",
-                ):
+        for thread in threads:
 
-                    continue
-
-                if (
-                    config.internal_only
-                    and parsed.netloc != context.target
-                ):
-
-                    continue
-
-                if absolute not in discovered:
-
-                    discovered.add(
-                        absolute,
-                    )
-
-                    queue.append(
-                        (
-                            absolute,
-                            depth + 1,
-                        )
-                    )
+            thread.join()
 
         return sorted(
             discovered,
