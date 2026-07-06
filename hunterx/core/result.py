@@ -13,7 +13,7 @@ class DNSResult:
     ip: str | None = None
 
     records: dict[str, list[str]] = field(
-        default_factory=dict
+        default_factory=dict,
     )
 
 
@@ -24,28 +24,28 @@ class HTTPResult:
 
     server: str | None = None
 
-    title: str | None = None
+    title: str |None = None
 
     url: str | None = None
 
     headers: dict[str, str] = field(
-        default_factory=dict
+        default_factory=dict,
     )
 
     technologies: list[str] = field(
-        default_factory=list
+        default_factory=list,
     )
 
     security_headers: dict[str, str] = field(
-        default_factory=dict
+        default_factory=dict,
     )
 
     cookies: list[dict] = field(
-        default_factory=list
+        default_factory=list,
     )
 
     cors: dict[str, str] = field(
-        default_factory=dict
+        default_factory=dict,
     )
 
 
@@ -53,7 +53,7 @@ class HTTPResult:
 class SubdomainResult:
 
     hosts: list[str] = field(
-        default_factory=list
+        default_factory=list,
     )
 
 
@@ -61,15 +61,15 @@ class SubdomainResult:
 class CrawlerResult:
 
     urls: list[str] = field(
-        default_factory=list
+        default_factory=list,
     )
 
     robots: list[str] = field(
-        default_factory=list
+        default_factory=list,
     )
 
     sitemap: list[str] = field(
-        default_factory=list
+        default_factory=list,
     )
 
 
@@ -77,7 +77,23 @@ class CrawlerResult:
 class DirectoryResult:
 
     paths: list[str] = field(
-        default_factory=list
+        default_factory=list,
+    )
+
+
+@dataclass(slots=True)
+class PortScannerResult:
+
+    open_ports: list[int] = field(
+        default_factory=list,
+    )
+
+    services: dict[int, str] = field(
+        default_factory=dict,
+    )
+
+    banners: dict[int, str] = field(
+        default_factory=dict,
     )
 
 
@@ -85,21 +101,25 @@ class DirectoryResult:
 class ScanResult:
 
     dns: DNSResult = field(
-        default_factory=DNSResult
+        default_factory=DNSResult,
     )
 
     http: HTTPResult = field(
-        default_factory=HTTPResult
+        default_factory=HTTPResult,
     )
 
     subdomains: SubdomainResult = field(
-        default_factory=SubdomainResult
+        default_factory=SubdomainResult,
     )
 
     crawler: CrawlerResult = field(
-        default_factory=CrawlerResult
+        default_factory=CrawlerResult,
     )
 
     directory: DirectoryResult = field(
-        default_factory=DirectoryResult
+        default_factory=DirectoryResult,
+    )
+
+    portscanner: PortScannerResult = field(
+        default_factory=PortScannerResult,
     )

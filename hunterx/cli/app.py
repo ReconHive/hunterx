@@ -61,7 +61,7 @@ def modules() -> None:
         "subdomain",
         "technology",
         "security-headers",
-        "port-scanner (coming soon)",
+        "port-scanner",
         "tls-scanner (coming soon)",
         "report-generator",
     ]
