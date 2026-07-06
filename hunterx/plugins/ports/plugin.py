@@ -3,6 +3,7 @@ from __future__ import annotations
 from hunterx.core.context import ScanContext
 from hunterx.modules.ports.scanner import PortScanner
 from hunterx.plugins.base import Plugin
+from hunterx.modules.ports.parser import BannerParser
 
 
 class PortScannerPlugin(Plugin):
@@ -12,6 +13,8 @@ class PortScannerPlugin(Plugin):
     def __init__(self) -> None:
 
         self.scanner = PortScanner()
+
+        self.parser = BannerParser()
 
     def run(
         self,
@@ -51,18 +54,21 @@ class PortScannerPlugin(Plugin):
 
         for port in ports:
 
+            service = services[port]
+
             context.logger.success(
-                f"{port}/tcp ({services[port]})"
+                f"{port}/tcp ({service})"
             )
 
-            banner = banners.get(
-                port,
+            version = self.parser.parse(
+                service,
+                banners.get(port),
             )
 
-            if banner:
+            if version:
 
                 context.logger.info(
-                    f"Banner: {banner}"
+                    f"    {version}"
                 )
 
         self.save_workspace(

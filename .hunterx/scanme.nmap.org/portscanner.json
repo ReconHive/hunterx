@@ -4,11 +4,11 @@
         80
     ],
     "services": {
-        "80": "http",
-        "22": "ssh"
+        "22": "ssh",
+        "80": "http"
     },
     "banners": {
-        "80": "HTTP/1.1 200 OK\r\nDate: Mon, 06 Jul 2026 17:22:47 GMT\r\nServer: Apache/2.4.7 (Ubuntu)\r\nAccept-Ranges: bytes\r\nVary: Accept-Encoding\r\nConnection: close\r\nContent-Type: text/html",
-        "22": "SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13"
+        "22": "SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13",
+        "80": "HTTP/1.1 200 OK\r\nDate: Mon, 06 Jul 2026 17:30:18 GMT\r\nServer: Apache/2.4.7 (Ubuntu)\r\nAccept-Ranges: bytes\r\nVary: Accept-Encoding\r\nConnection: close\r\nContent-Type: text/html"
     }
 }
