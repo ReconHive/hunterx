@@ -67,6 +67,7 @@ class ScanEngine:
             metrics=container.metrics,
             progress=container.progress,
             cache=container.cache,
+            workspace=container.workspace,
             selected_plugins=selected,
             custom_headers=custom_headers or {},
             method=method.upper(),

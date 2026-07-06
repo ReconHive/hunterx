@@ -159,3 +159,8 @@ class CrawlerPlugin(Plugin):
             context.logger.success(
                 url
             )
+
+        self.save_workspace(
+            context,
+            context.result.crawler,
+        )

@@ -23,3 +23,8 @@ class SubdomainPlugin(Plugin):
         )
 
         context.result.subdomains.hosts = hosts
+
+        self.save_workspace(
+            context,
+            context.result.subdomains,
+        )

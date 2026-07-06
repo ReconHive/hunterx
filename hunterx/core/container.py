@@ -8,6 +8,7 @@ from hunterx.core.http import HTTPPool
 from hunterx.core.metrics.manager import MetricsManager
 from hunterx.core.cache.manager import CacheManager
 from hunterx.core.progress.manager import ProgressManager
+from hunterx.core.workspace import WorkspaceManager
 
 class ServiceContainer:
 
@@ -42,6 +43,8 @@ class ServiceContainer:
 
         self.cache = CacheManager()
 
+        self.workspace = WorkspaceManager()
+
         self.progress = ProgressManager()
 
         from hunterx.core.progress.hook import ProgressHook
@@ -49,6 +52,7 @@ class ServiceContainer:
         self.hooks.register(
             ProgressHook()
         )
+
 
     def close(self) -> None:
 

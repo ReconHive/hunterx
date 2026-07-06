@@ -43,3 +43,8 @@ class DirectoryPlugin(Plugin):
         for item in results:
 
             context.logger.success(item)
+
+        self.save_workspace(
+            context,
+            context.result.directory,
+        )

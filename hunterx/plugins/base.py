@@ -3,7 +3,6 @@ from __future__ import annotations
 from abc import ABC
 from abc import abstractmethod
 
-from hunterx.core.result import ScanResult
 from hunterx.core.context import ScanContext
 
 
@@ -23,3 +22,15 @@ class Plugin(ABC):
         """
         Execute plugin.
         """
+
+    def save_workspace(
+        self,
+        context: ScanContext,
+        data: object,
+    ) -> None:
+
+        context.workspace.save(
+            context.target,
+            self.name,
+            data,
+        )

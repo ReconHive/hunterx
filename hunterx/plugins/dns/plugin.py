@@ -32,3 +32,8 @@ class DNSPlugin(Plugin):
                 context
             )
         )
+
+        self.save_workspace(
+            context,
+            context.result.dns,
+        )

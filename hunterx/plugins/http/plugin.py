@@ -98,3 +98,8 @@ class HTTPPlugin(Plugin):
             context.result.http.technologies = (
                 technologies
             )
+
+        self.save_workspace(
+            context,
+            context.result.http,
+        )

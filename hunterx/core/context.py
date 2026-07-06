@@ -12,6 +12,7 @@ from hunterx.core.result import ScanResult
 from hunterx.core.metrics.manager import MetricsManager
 from hunterx.core.cache.manager import CacheManager
 from hunterx.core.progress.manager import ProgressManager
+from hunterx.core.workspace import WorkspaceManager
 
 
 @dataclass(slots=True)
@@ -37,6 +38,8 @@ class ScanContext:
     metrics: MetricsManager
 
     cache: CacheManager
+
+    workspace: WorkspaceManager
 
     progress: ProgressManager
 
