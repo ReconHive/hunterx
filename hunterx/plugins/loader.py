@@ -8,6 +8,7 @@ from hunterx.plugins.subdomain.plugin import SubdomainPlugin
 from hunterx.plugins.crawler.crawler import CrawlerPlugin
 from hunterx.plugins.directory.plugin import DirectoryPlugin
 from hunterx.plugins.ports.plugin import PortScannerPlugin
+from hunterx.plugins.tls.plugin import TLSPlugin
 
 
 class PluginLoader:
@@ -39,7 +40,12 @@ class PluginLoader:
         )
 
         plugins.register(
-            PortScannerPlugin(),
+            PortScannerPlugin()
         )
+
+        plugins.register(
+            TLSPlugin()
+        )
+
 
         return plugins

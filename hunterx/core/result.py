@@ -98,6 +98,38 @@ class PortScannerResult:
 
 
 @dataclass(slots=True)
+class TLSResult:
+
+    enabled: bool = False
+
+    version: str | None = None
+
+    cipher: str | None = None
+
+    issuer: str | None = None
+
+    subject: str | None = None
+
+    san: list[str] = field(
+        default_factory=list,
+    )
+
+    expires: str | None = None
+
+    days_remaining: int | None = None
+
+    expired: bool = False
+
+    self_signed: bool = False
+
+    wildcard: bool = False
+
+    serial: str | None = None
+
+    signature_algorithm: str | None = None
+
+
+@dataclass(slots=True)
 class ScanResult:
 
     dns: DNSResult = field(
@@ -122,4 +154,8 @@ class ScanResult:
 
     portscanner: PortScannerResult = field(
         default_factory=PortScannerResult,
+    )
+
+    tls: TLSResult = field(
+        default_factory=TLSResult,
     )
