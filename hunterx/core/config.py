@@ -38,6 +38,10 @@ class HTTPConfig:
 
     follow_redirects: bool = True
 
+    retries: int = 3
+
+    backoff: float = 0.5
+
 
 @dataclass(slots=True)
 class CrawlerConfig:

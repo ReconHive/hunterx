@@ -25,7 +25,7 @@ class HTTPFingerprint:
 
         try:
 
-            response = context.http.client.get(url)
+            response = context.http.get(url)
 
             html = response.text
 

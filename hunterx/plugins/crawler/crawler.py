@@ -48,7 +48,7 @@ class CrawlerPlugin(Plugin):
 
         try:
 
-            response = context.http.client.get(
+            response = context.http.get(
                 f"{base}/robots.txt"
             )
 
@@ -102,7 +102,7 @@ class CrawlerPlugin(Plugin):
 
         try:
 
-            response = context.http.client.get(
+            response = context.http.get(
                 f"{base}/sitemap.xml"
             )
 

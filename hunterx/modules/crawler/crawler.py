@@ -70,7 +70,7 @@ class WebCrawler:
 
                     try:
 
-                        response = context.http.client.get(
+                        response = context.http.get(
                             url,
                         )
 

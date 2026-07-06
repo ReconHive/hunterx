@@ -97,7 +97,7 @@ class DirectoryScanner:
 
             try:
 
-                response = context.http.client.get(
+                response = context.http.get(
                     url,
                     follow_redirects=config.follow_redirects,
                 )
