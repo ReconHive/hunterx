@@ -34,6 +34,7 @@ class ScanEngine:
         self.result = result
 
         loader = PluginLoader()
+
         self.plugins = loader.load()
 
     def run(
@@ -49,12 +50,22 @@ class ScanEngine:
         )
 
         container.hooks.register(
-            LoggerHook()
+            LoggerHook(),
         )
 
         selected = self.plugins.select(
-            plugins
+            plugins,
         )
+
+        if plugins and not selected:
+
+            logger.warning(
+                "No matching plugins were found."
+            )
+
+            container.close()
+
+            return
 
         context = ScanContext(
             target=target,
@@ -82,20 +93,6 @@ class ScanEngine:
                 target=target,
             )
         )
-
-        selected = self.plugins.select(
-            plugins,
-        )
-
-        if plugins and not selected:
-
-            logger.warning(
-                "No matching plugins were found."
-            )
-
-            container.close()
-
-            return
 
         for plugin in selected:
 
@@ -135,7 +132,9 @@ class ScanEngine:
             context,
         )
 
-        logger.info("Metrics")
+        logger.info(
+            "Metrics"
+        )
 
         logger.success(
             f"Elapsed : {context.metrics.elapsed:.2f}s"
@@ -150,14 +149,3 @@ class ScanEngine:
             )
 
         container.close()
-
-
-
-class DirectoryScanner:
-
-    def scan(
-        self,
-        context: ScanContext,
-    ) -> list[str]:
-
-        ...

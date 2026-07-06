@@ -132,6 +132,11 @@ def scan(
         "--dir-threads",
         help="Override worker threads for directory scanner",
     ),
+    fresh: bool = typer.Option(
+        False,
+        "--fresh",
+        help="Start with a clean workspace.",
+    ),
 
 ) -> None:
     """
@@ -210,6 +215,7 @@ def scan(
         custom_headers=custom_headers,
         method=method,
         wordlist=wordlist,
+        fresh=fresh,
     )
 
     if output is None:

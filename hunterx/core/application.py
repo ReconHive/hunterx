@@ -8,6 +8,7 @@ from hunterx.core.config import Config
 from hunterx.core.logger import logger
 from hunterx.core.result import ScanResult
 from hunterx.core.scanner import ScanEngine
+from hunterx.core.workspace.manager import WorkspaceManager
 
 
 class HunterX:
@@ -23,15 +24,21 @@ class HunterX:
 
         self.result = ScanResult()
 
+        self.workspace = WorkspaceManager()
+
         self.initialized = False
 
     def initialize(self) -> None:
 
-        logger.info("Initializing HunterX framework...")
+        logger.info(
+            "Initializing HunterX framework..."
+        )
 
         self.initialized = True
 
-        logger.success("Framework initialized.")
+        logger.success(
+            "Framework initialized."
+        )
 
     def run(
         self,
@@ -41,21 +48,53 @@ class HunterX:
         method: str = "GET",
         depth: int | None = None,
         wordlist: str | None = None,
+        fresh: bool = False,
     ) -> None:
 
         if not self.initialized:
+
             self.initialize()
+
+        if fresh:
+
+            logger.info(
+                "Cleaning workspace..."
+            )
+
+            self.workspace.clear(
+                target,
+            )
+
+            logger.success(
+                "Workspace cleaned."
+            )
+
+        #
+        # New scan result
+        #
+
+        self.result = ScanResult()
+
+        #
+        # Runtime config
+        #
+
+        if depth is not None:
+
+            self.config.crawler.depth = depth
+
+        if wordlist is not None:
+
+            self.config.directory.wordlist = wordlist
+
+        #
+        # Scan engine
+        #
 
         engine = ScanEngine(
             config=self.config,
             result=self.result,
         )
-
-        if depth is not None:
-            self.config.crawler.depth = depth
-
-        if wordlist is not None:
-            self.config.directory.wordlist = wordlist
 
         engine.run(
             target=target,

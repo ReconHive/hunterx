@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import json
+import shutil
+
 from dataclasses import asdict
 from dataclasses import is_dataclass
+
 from pathlib import Path
+
 from typing import Any
 
 
@@ -14,7 +18,7 @@ class WorkspaceStorage:
     def __init__(
         self,
         target: str,
-    ) ->None:
+    ) -> None:
 
         self.path = (
             self.ROOT /
@@ -127,3 +131,18 @@ class WorkspaceStorage:
         if file.exists():
 
             file.unlink()
+
+    def clear(
+        self,
+    ) -> None:
+
+        if self.path.exists():
+
+            shutil.rmtree(
+                self.path,
+            )
+
+        self.path.mkdir(
+            parents=True,
+            exist_ok=True,
+        )

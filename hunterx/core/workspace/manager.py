@@ -76,5 +76,4 @@ class WorkspaceManager:
 
         storage = WorkspaceStorage(target)
 
-        for plugin in self.list(target):
-            storage.delete(plugin)
+        storage.clear()
