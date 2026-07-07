@@ -69,17 +69,6 @@ r="8"
 fill="#FFFFFF"
 />
 
-<text
-x="110"
-y="212"
-text-anchor="middle"
-font-size="18"
-font-family="Segoe UI,Arial,sans-serif"
-font-weight="700"
-fill="#58A6FF">
-HunterX
-</text>
-
 </svg>
 
 </p>
