@@ -1,7 +1,5 @@
 <p align="center">
 
-# 🇮🇷 نسخه فارسی | Persian Documentation
-
 [English Version](README.md)
 
 </p>
