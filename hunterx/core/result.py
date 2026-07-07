@@ -5,6 +5,7 @@ HunterX Scan Result Model
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from hunterx.modules.javascript.models import JavaScriptResult
 
 
 @dataclass(slots=True)
@@ -133,6 +134,9 @@ class TLSResult:
     )
 
 
+
+
+
 @dataclass(slots=True)
 class ScanResult:
 
@@ -166,4 +170,8 @@ class ScanResult:
 
     findings: list[str] = field(
         default_factory=list,
+    )
+
+    javascript: JavaScriptResult = field(
+        default_factory=JavaScriptResult,
     )

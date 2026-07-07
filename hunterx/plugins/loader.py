@@ -9,6 +9,7 @@ from hunterx.plugins.crawler.crawler import CrawlerPlugin
 from hunterx.plugins.directory.plugin import DirectoryPlugin
 from hunterx.plugins.ports.plugin import PortScannerPlugin
 from hunterx.plugins.tls.plugin import TLSPlugin
+from hunterx.plugins.javascript.plugin import JavaScriptPlugin
 
 
 class PluginLoader:
@@ -45,6 +46,10 @@ class PluginLoader:
 
         plugins.register(
             TLSPlugin()
+        )
+
+        plugins.register(
+            JavaScriptPlugin()
         )
 
 
