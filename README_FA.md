@@ -1,6 +1,6 @@
 <p align="center">
 
-[English Version](README.md)
+⬅️ [English Version](README.md)
 
 </p>
 
