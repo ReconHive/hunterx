@@ -4,6 +4,16 @@
 
 <defs>
 
+<p align="center">
+
+🇬🇧 English Documentation
+
+🇮🇷 فارسی
+
+➡️ [مشاهده نسخه فارسی](README_FA.md)
+
+</p>
+
 <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
 <stop offset="0%" stop-color="#00E5FF"/>
 <stop offset="100%" stop-color="#0066FF"/>
