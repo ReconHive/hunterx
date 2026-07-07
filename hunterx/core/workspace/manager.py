@@ -14,9 +14,9 @@ class WorkspaceManager:
         data: Any,
     ) -> None:
 
-        storage = WorkspaceStorage(target)
-
-        storage.save(
+        WorkspaceStorage(
+            target,
+        ).save(
             name,
             data,
         )
@@ -27,9 +27,9 @@ class WorkspaceManager:
         name: str,
     ) -> Any | None:
 
-        storage = WorkspaceStorage(target)
-
-        return storage.load(
+        return WorkspaceStorage(
+            target,
+        ).load(
             name,
         )
 
@@ -39,9 +39,9 @@ class WorkspaceManager:
         name: str,
     ) -> bool:
 
-        storage = WorkspaceStorage(target)
-
-        return storage.exists(
+        return WorkspaceStorage(
+            target,
+        ).exists(
             name,
         )
 
@@ -51,9 +51,9 @@ class WorkspaceManager:
         name: str,
     ) -> None:
 
-        storage = WorkspaceStorage(target)
-
-        storage.delete(
+        WorkspaceStorage(
+            target,
+        ).delete(
             name,
         )
 
@@ -62,11 +62,15 @@ class WorkspaceManager:
         target: str,
     ) -> list[str]:
 
-        storage = WorkspaceStorage(target)
+        storage = WorkspaceStorage(
+            target,
+        )
 
         return [
             file.stem
-            for file in storage.path.glob("*.json")
+            for file in storage.path.glob(
+                "*.json",
+            )
         ]
 
     def clear(
@@ -74,6 +78,6 @@ class WorkspaceManager:
         target: str,
     ) -> None:
 
-        storage = WorkspaceStorage(target)
-
-        storage.clear()
+        WorkspaceStorage(
+            target,
+        ).clear()

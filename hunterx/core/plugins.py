@@ -14,22 +14,34 @@ class PluginCollection:
         plugin: Plugin,
     ) -> None:
 
-        self._plugins[plugin.name] = plugin
+        self._plugins[
+            plugin.name
+        ] = plugin
 
     def get(
         self,
         name: str,
     ) -> Plugin | None:
 
-        return self._plugins.get(name)
+        return self._plugins.get(
+            name,
+        )
 
-    def all(self) -> list[Plugin]:
+    def all(
+        self,
+    ) -> list[Plugin]:
 
-        return list(self._plugins.values())
+        return list(
+            self._plugins.values(),
+        )
 
-    def names(self) -> list[str]:
+    def names(
+        self,
+    ) -> list[str]:
 
-        return sorted(self._plugins.keys())
+        return sorted(
+            self._plugins.keys(),
+        )
 
     def select(
         self,
@@ -44,17 +56,44 @@ class PluginCollection:
 
         for name in names:
 
-            plugin = self.get(name)
+            plugin = self.get(
+                name,
+            )
 
-            if plugin:
+            if plugin is not None:
 
-                plugins.append(plugin)
+                plugins.append(
+                    plugin,
+                )
 
         return plugins
-    
+
+    def exists(
+        self,
+        name: str,
+    ) -> bool:
+
+        return name in self._plugins
+
+    def __contains__(
+        self,
+        name: str,
+    ) -> bool:
+
+        return self.exists(
+            name,
+        )
+
     def __iter__(self):
-        return iter(self._plugins.values())
 
+        return iter(
+            self._plugins.values(),
+        )
 
-    def __len__(self):
-        return len(self._plugins)
+    def __len__(
+        self,
+    ) -> int:
+
+        return len(
+            self._plugins,
+        )

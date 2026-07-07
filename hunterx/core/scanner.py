@@ -19,7 +19,6 @@ from hunterx.core.result import ScanResult
 from hunterx.plugins.loader import PluginLoader
 
 
-
 class ScanEngine:
     """
     Coordinates all plugins.
@@ -37,6 +36,51 @@ class ScanEngine:
         loader = PluginLoader()
 
         self.plugins = loader.load()
+
+    def _resolve_dependencies(
+        self,
+        context: ScanContext,
+        selected: list,
+    ) -> list:
+
+        names = {
+            plugin.name
+            for plugin in selected
+        }
+
+        #
+        # javascript -> crawler
+        #
+
+        if (
+            "javascript" in names
+            and "crawler" not in names
+            and not context.workspace.exists(
+                context.target,
+                "crawler",
+            )
+        ):
+
+            crawler = self.plugins.get(
+                "crawler",
+            )
+
+            if crawler is not None:
+
+                logger.info(
+                    "Crawler workspace not found."
+                )
+
+                logger.info(
+                    "Running crawler automatically..."
+                )
+
+                selected.insert(
+                    0,
+                    crawler,
+                )
+
+        return selected
 
     def run(
         self,
@@ -84,6 +128,13 @@ class ScanEngine:
             custom_headers=custom_headers or {},
             method=method.upper(),
         )
+
+        selected = self._resolve_dependencies(
+            context,
+            selected,
+        )
+
+        context.selected_plugins = selected
 
         container.hooks.before_scan(
             context,

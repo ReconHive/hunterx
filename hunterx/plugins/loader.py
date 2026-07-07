@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from hunterx.core.plugins import PluginCollection
 
-from hunterx.plugins.dns.plugin import DNSPlugin
-from hunterx.plugins.http.plugin import HTTPPlugin
-from hunterx.plugins.subdomain.plugin import SubdomainPlugin
 from hunterx.plugins.crawler.crawler import CrawlerPlugin
 from hunterx.plugins.directory.plugin import DirectoryPlugin
-from hunterx.plugins.ports.plugin import PortScannerPlugin
-from hunterx.plugins.tls.plugin import TLSPlugin
+from hunterx.plugins.dns.plugin import DNSPlugin
+from hunterx.plugins.http.plugin import HTTPPlugin
 from hunterx.plugins.javascript.plugin import JavaScriptPlugin
+from hunterx.plugins.ports.plugin import PortScannerPlugin
+from hunterx.plugins.subdomain.plugin import SubdomainPlugin
+from hunterx.plugins.tls.plugin import TLSPlugin
 
 
 class PluginLoader:
@@ -21,36 +21,35 @@ class PluginLoader:
         plugins = PluginCollection()
 
         plugins.register(
-            DNSPlugin()
+            DNSPlugin(),
         )
 
         plugins.register(
-            HTTPPlugin()
+            HTTPPlugin(),
         )
 
         plugins.register(
-            SubdomainPlugin()
+            SubdomainPlugin(),
         )
 
         plugins.register(
-            CrawlerPlugin()
+            CrawlerPlugin(),
         )
 
         plugins.register(
-            DirectoryPlugin()
+            DirectoryPlugin(),
         )
 
         plugins.register(
-            PortScannerPlugin()
+            PortScannerPlugin(),
         )
 
         plugins.register(
-            TLSPlugin()
+            TLSPlugin(),
         )
 
         plugins.register(
-            JavaScriptPlugin()
+            JavaScriptPlugin(),
         )
-
 
         return plugins
