@@ -92,22 +92,6 @@ Modern Modular Reconnaissance Framework
 Built for Bug Bounty Hunters • Pentesters • Security Researchers
 </p>
 
-<h1 align="center">
-HunterX
-</h1>
-
-<p align="center">
-
-Modern Modular Reconnaissance Framework for Bug Bounty Hunters & Security Researchers
-
-</p>
-
-<p align="center">
-
-Python • Fast • Modular • Extensible
-
-</p>
-
 ---
 
 # HunterX
