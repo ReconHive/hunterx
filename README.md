@@ -6,10 +6,6 @@
 
 <p align="center">
 
-🇬🇧 English Documentation
-
-🇮🇷 فارسی
-
 ➡️ [مشاهده نسخه فارسی](README_FA.md)
 
 </p>
