@@ -1,8 +1,92 @@
+
+
+<p align="center">
+
+<svg width="180" height="180" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
 <p align="center">
 
 ⬅️ [English Version](README.md)
 
 </p>
+
+<linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#00E5FF"/>
+<stop offset="100%" stop-color="#0066FF"/>
+</linearGradient>
+
+<linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#00FFD5"/>
+<stop offset="100%" stop-color="#00B894"/>
+</linearGradient>
+
+<filter id="shadow">
+<feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00D9FF"/>
+</filter>
+
+</defs>
+
+<circle
+cx="110"
+cy="110"
+r="90"
+fill="#0D1117"
+stroke="url(#g1)"
+stroke-width="4"
+/>
+
+<circle
+cx="110"
+cy="110"
+r="65"
+fill="none"
+stroke="#00E5FF"
+stroke-width="2"
+stroke-dasharray="6 6"
+/>
+
+<circle
+cx="110"
+cy="110"
+r="42"
+fill="none"
+stroke="#00FFD5"
+stroke-width="2"
+/>
+
+<path
+d="M110 28
+L118 98
+L192 110
+L118 122
+L110 192
+L102 122
+L28 110
+L102 98Z"
+fill="url(#g1)"
+filter="url(#shadow)"
+opacity="0.95"
+/>
+
+<circle
+cx="110"
+cy="110"
+r="8"
+fill="#FFFFFF"
+/>
+
+</svg>
+
+</p>
+
+
+
+
+
+
+
 
 ---
 
