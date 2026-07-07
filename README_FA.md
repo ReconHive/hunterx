@@ -82,7 +82,13 @@ fill="#FFFFFF"
 </p>
 
 
+<h1 align="center">HunterX</h1>
 
+<p align="center">
+فریم ورک مدرن و ماژولار شناسایی
+<br>
+ساخته شده برای Bug Bounty Hunters • Pentesters • Security Researchers
+</p>
 
 
 
