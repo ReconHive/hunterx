@@ -1,0 +1,14 @@
+{
+    "open_ports": [
+        80,
+        443
+    ],
+    "services": {
+        "80": "http",
+        "443": "https"
+    },
+    "banners": {
+        "80": "HTTP/1.0 301 Moved Permanently\r\nLocation: http://www.google.com/\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-T4X4wChiEqruywnDcfgOFg' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp\r\nDate: Tue, 07 Jul 2026 16:09:17 GMT\r\nExpires: Thu, 06 Aug 2026 16:09:17 GMT\r\nCache-Control: public, max-age=2592000\r\nServer: gws\r\nContent-Length: 219\r\nX-XSS-Protection: 0\r\nX-Frame-Options: SAMEORIGIN",
+        "443": "HTTP/1.0 301 Moved Permanently\r\nLocation: https://www.google.com/\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-iCm2tj_FHPYJOy_Id-EkgQ' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp\r\nDate: Tue, 07 Jul 2026 16:09:17 GMT\r\nExpires: Thu, 06 Aug 2026 16:09:17 GMT\r\nCache-Control: public, max-age=2592000\r\nServer: gws\r\nContent-Length: 220\r\nX-XSS-Protection: 0\r\nX-Frame-Options: SAMEORIGIN\r\nAlt-Svc: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+    }
+}

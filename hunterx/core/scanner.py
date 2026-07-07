@@ -4,6 +4,8 @@ HunterX Scan Engine
 
 from __future__ import annotations
 
+from hunterx.cli.progress import progress
+
 from hunterx.core.config import Config
 from hunterx.core.container import ServiceContainer
 from hunterx.core.context import ScanContext
@@ -146,33 +148,47 @@ class ScanEngine:
             )
         )
 
-        for plugin in selected:
+        task = progress.add_task(
+            "Running plugins...",
+            total=len(selected),
+        )
 
-            container.hooks.before_plugin(
-                context,
-                plugin,
-            )
+        with progress:
 
-            context.events.publish(
-                PluginStarted(
-                    plugin=plugin.name,
+            for plugin in selected:
+
+                progress.update(
+                    task,
+                    description=f"[cyan]{plugin.name.upper()}",
                 )
-            )
 
-            plugin.run(
-                context,
-            )
-
-            context.events.publish(
-                PluginFinished(
-                    plugin=plugin.name,
+                container.hooks.before_plugin(
+                    context,
+                    plugin,
                 )
-            )
 
-            container.hooks.after_plugin(
-                context,
-                plugin,
-            )
+                context.events.publish(
+                    PluginStarted(
+                        plugin=plugin.name,
+                    )
+                )
+
+                plugin.run(
+                    context,
+                )
+
+                context.events.publish(
+                    PluginFinished(
+                        plugin=plugin.name,
+                    )
+                )
+
+                container.hooks.after_plugin(
+                    context,
+                    plugin,
+                )
+
+                progress.advance(task)
 
         context.events.publish(
             ScanFinished(

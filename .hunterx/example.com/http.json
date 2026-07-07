@@ -1,0 +1,33 @@
+{
+    "status": 200,
+    "server": "cloudflare",
+    "title": null,
+    "url": "https://example.com",
+    "headers": {
+        "date": "Tue, 07 Jul 2026 16:04:34 GMT",
+        "content-type": "text/html",
+        "server": "cloudflare",
+        "last-modified": "Wed, 01 Jul 2026 17:50:18 GMT",
+        "allow": "GET, HEAD",
+        "accept-ranges": "bytes",
+        "age": "1013",
+        "cf-cache-status": "HIT",
+        "cf-ray": "a17815f168e70d38-ARN"
+    },
+    "technologies": [
+        "Cloudflare"
+    ],
+    "security_headers": {
+        "Content-Security-Policy": "Missing",
+        "Strict-Transport-Security": "Missing",
+        "X-Frame-Options": "Missing",
+        "X-Content-Type-Options": "Missing",
+        "Referrer-Policy": "Missing",
+        "Permissions-Policy": "Missing",
+        "Cross-Origin-Resource-Policy": "Missing",
+        "Cross-Origin-Embedder-Policy": "Missing",
+        "Cross-Origin-Opener-Policy": "Missing"
+    },
+    "cookies": [],
+    "cors": {}
+}

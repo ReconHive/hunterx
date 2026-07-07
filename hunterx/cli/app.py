@@ -3,9 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 
 import typer
-from rich.console import Console
 
 from hunterx.cli.banner import print_banner
+from hunterx.cli.console import console
 from hunterx.core.application import HunterX
 from hunterx.core.output.manager import OutputManager
 
@@ -14,8 +14,6 @@ app = typer.Typer(
     no_args_is_help=True,
     add_completion=False,
 )
-
-console = Console()
 
 
 @app.callback()
@@ -37,7 +35,7 @@ def version() -> None:
     console.print()
 
     console.print(
-        "[bold cyan]Version[/bold cyan] : 0.1.0"
+        "[header]Version[/header] : [success]0.1.0[/success]"
     )
 
 
@@ -52,22 +50,25 @@ def modules() -> None:
     console.print()
 
     console.print(
-        "[bold green]Available Modules[/bold green]\n"
+        "[header]Available Modules[/header]\n"
     )
 
     modules = [
         "dns",
         "http",
         "subdomain",
-        "technology",
-        "security-headers",
-        "port-scanner",
-        "tls-scanner (coming soon)",
+        "crawler",
+        "directory",
+        "javascript",
+        "tls",
+        "ports",
         "report-generator",
     ]
 
     for module in modules:
-        console.print(f" • {module}")
+        console.print(
+            f" • [plugin]{module}[/plugin]"
+        )
 
 
 @app.command()
@@ -80,7 +81,7 @@ def scan(
         None,
         "--plugins",
         "-p",
-        help="Comma separated plugins. Example: dns,http,subdomain",
+        help="Comma separated plugins. Example: dns,http",
     ),
     output: str | None = typer.Option(
         None,
@@ -99,7 +100,7 @@ def scan(
         "--threads",
         help="Worker threads",
     ),
-    headers: list[str] = typer.Option(
+    headers: list[str] | None = typer.Option(
         None,
         "--header",
         "-H",
@@ -130,14 +131,13 @@ def scan(
     dir_threads: int | None = typer.Option(
         None,
         "--dir-threads",
-        help="Override worker threads for directory scanner",
+        help="Override directory workers",
     ),
     fresh: bool = typer.Option(
         False,
         "--fresh",
         help="Start with a clean workspace.",
     ),
-
 ) -> None:
     """
     Scan target.
@@ -147,19 +147,24 @@ def scan(
 
     hunter = HunterX()
 
+    #
+    # Extensions
+    #
+
     if extensions:
 
         hunter.config.directory.extensions = [
-
             ext.strip().lstrip(".")
-
             for ext in extensions.split(",")
-
             if ext.strip()
-
         ]
 
+    #
+    # Timeout
+    #
+
     if timeout is not None:
+
         hunter.config.http.timeout = timeout
         hunter.config.dns.timeout = timeout
 
@@ -172,14 +177,22 @@ def scan(
         hunter.config.scanner.workers = threads
 
     #
-    # Directory override
+    # Directory workers
     #
 
     if dir_threads is not None:
 
         hunter.config.directory.threads = dir_threads
 
+    #
+    # Crawler
+    #
+
     hunter.config.crawler.depth = depth
+
+    #
+    # Plugins
+    #
 
     selected_plugins: list[str] | None = None
 
@@ -190,6 +203,10 @@ def scan(
             for plugin in plugins.split(",")
             if plugin.strip()
         ]
+
+    #
+    # Headers
+    #
 
     custom_headers: dict[str, str] = {}
 
@@ -209,6 +226,10 @@ def scan(
                 key.strip()
             ] = value.strip()
 
+    #
+    # Run
+    #
+
     hunter.run(
         target=target,
         plugins=selected_plugins,
@@ -217,6 +238,10 @@ def scan(
         wordlist=wordlist,
         fresh=fresh,
     )
+
+    #
+    # Output
+    #
 
     if output is None:
         return
@@ -237,7 +262,7 @@ def scan(
         console.print()
 
         console.print(
-            "[bold red]Unsupported output format.[/bold red]"
+            "[error]Unsupported output format.[/error]"
         )
 
         raise typer.Exit(code=1)
@@ -251,5 +276,9 @@ def scan(
     console.print()
 
     console.print(
-        f"[bold green]Report saved to[/bold green] {output}"
+        f"[success]Report saved to[/success] {output}"
     )
+
+
+if __name__ == "__main__":
+    app()
