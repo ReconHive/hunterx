@@ -7,7 +7,6 @@
 <p align="center">
 
 ➡️ [مشاهده نسخه فارسی](README_FA.md)
-
 </p>
 
 <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
