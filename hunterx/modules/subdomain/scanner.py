@@ -13,6 +13,7 @@ from hunterx.core.context import ScanContext
 
 from hunterx.modules.subdomain.wordlist import Wordlist
 from hunterx.modules.subdomain.bruteforce import Bruteforce
+from hunterx.modules.subdomain.manager import PassiveManager
 from hunterx.modules.subdomain.wildcard import WildcardDetector
 
 
@@ -26,6 +27,8 @@ class SubdomainScanner:
 
         self.bruteforce = Bruteforce()
 
+        self.passive = PassiveManager()
+
     def scan(
         self,
         context: ScanContext,
@@ -37,11 +40,19 @@ class SubdomainScanner:
             context,
         )
 
+        passive_hosts = self.passive.scan(
+            context,
+        )
+
         words = self.wordlist.load()
 
-        hosts = self.bruteforce.scan(
+        brute_hosts = self.bruteforce.scan(
             context,
             words,
+        )
+
+        hosts = sorted(
+            set(passive_hosts) | set(brute_hosts)
         )
 
         elapsed = (
@@ -67,7 +78,15 @@ class SubdomainScanner:
                     else "Not Detected",
                 ),
                 (
-                    "Subdomains",
+                    "Passive Sources",
+                    str(len(passive_hosts)),
+                ),
+                (
+                    "Bruteforce",
+                    str(len(brute_hosts)),
+                ),
+                (
+                    "Total Subdomains",
                     str(len(hosts)),
                 ),
                 (
@@ -82,7 +101,7 @@ class SubdomainScanner:
             simple(
                 "Discovered Subdomains",
                 "Host",
-                sorted(hosts),
+                hosts,
             )
 
         else:
