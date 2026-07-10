@@ -11,6 +11,80 @@ _STATUS_RE = re.compile(
     r"^\[(\d{3})\]\s+(.*)$"
 )
 
+_FINDING_SEVERITY = {
+    "Expired Certificate": "error",
+    "Certificate expires soon": "warning",
+    "Self Signed Certificate": "warning",
+    "Wildcard Certificate": "info",
+}
+
+_SEVERITY_ICON = {
+    "error": "✗",
+    "warning": "⚠",
+    "info": "ℹ",
+}
+
+
+
+
+
+
+
+
+def findings(
+    title: str,
+    rows: list[str],
+) -> None:
+
+    table = Table(
+        title=f"[bold cyan]{title}[/bold cyan]",
+        border_style="bright_blue",
+        header_style="bold cyan",
+        show_header=True,
+        expand=False,
+        pad_edge=True,
+    )
+
+    table.add_column(
+        "#",
+        justify="right",
+        style="cyan",
+        width=4,
+    )
+
+    table.add_column(
+        "Severity",
+        justify="center",
+        width=10,
+    )
+
+    table.add_column(
+        "Finding",
+        style="white",
+    )
+
+    for index, row in enumerate(
+        rows,
+        start=1,
+    ):
+
+        severity = _FINDING_SEVERITY.get(
+            row,
+            "warning",
+        )
+
+        icon = _SEVERITY_ICON.get(
+            severity,
+            "⚠",
+        )
+
+        table.add_row(
+            str(index),
+            f"[{severity}]{icon} {severity.upper()}[/{severity}]",
+            row,
+        )
+
+    console.print(table)
 
 def _status_style(
     code: str,

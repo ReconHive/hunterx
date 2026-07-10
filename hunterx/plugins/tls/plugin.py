@@ -1,8 +1,31 @@
 from __future__ import annotations
 
+from hunterx.cli.tables import findings as findings_table
+from hunterx.cli.tables import key_value
+
 from hunterx.core.context import ScanContext
 from hunterx.modules.tls.scanner import TLSScanner
 from hunterx.plugins.base import Plugin
+
+
+def _days_style(
+    days: int | None,
+    expired: bool,
+) -> str:
+
+    if expired or (
+        days is not None
+        and days < 0
+    ):
+        return "error"
+
+    if (
+        days is not None
+        and days < 30
+    ):
+        return "warning"
+
+    return "success"
 
 
 class TLSPlugin(Plugin):
@@ -59,66 +82,79 @@ class TLSPlugin(Plugin):
         context.result.tls.serial = result["serial"]
 
         context.result.tls.signature_algorithm = result["signature_algorithm"]
-        
+
         context.result.tls.findings = result["findings"]
 
-        context.logger.success(
-            f"TLS Version : {result['version']}"
+        days_style = _days_style(
+            result["days_remaining"],
+            result["expired"],
         )
 
-        context.logger.success(
-            f"Cipher : {result['cipher']}"
-        )
-
-        context.logger.success(
-            f"Issuer : {result['issuer']}"
-        )
-
-        context.logger.success(
-            f"Subject : {result['subject']}"
-        )
-
-        context.logger.success(
-            f"Expires : {result['expires']}"
-        )
-
-        context.logger.success(
-            f"Days Remaining : {result['days_remaining']}"
-        )
-
-        if result["wildcard"]:
-
-            context.logger.info(
-                "Wildcard Certificate"
+        san_display = (
+            ", ".join(result["san"][:5])
+            + (
+                f" (+{len(result['san']) - 5} more)"
+                if len(result["san"]) > 5
+                else ""
             )
+            if result["san"]
+            else "-"
+        )
 
-        if result["self_signed"]:
-
-            context.logger.warning(
-                "Self Signed Certificate"
-            )
-
-        if result["expired"]:
-
-            context.logger.error(
-                "Certificate Expired"
-            )
+        key_value(
+            "TLS Certificate",
+            [
+                (
+                    "Target",
+                    context.target,
+                ),
+                (
+                    "Version",
+                    result["version"] or "-",
+                ),
+                (
+                    "Cipher",
+                    result["cipher"] or "-",
+                ),
+                (
+                    "Issuer",
+                    result["issuer"] or "-",
+                ),
+                (
+                    "Subject",
+                    result["subject"] or "-",
+                ),
+                (
+                    "SAN",
+                    san_display,
+                ),
+                (
+                    "Expires",
+                    result["expires"] or "-",
+                ),
+                (
+                    "Days Remaining",
+                    f"[{days_style}]{result['days_remaining']}[/{days_style}]"
+                    if result["days_remaining"] is not None
+                    else "-",
+                ),
+                (
+                    "Serial",
+                    result["serial"] or "-",
+                ),
+                (
+                    "Signature Algorithm",
+                    result["signature_algorithm"] or "-",
+                ),
+            ],
+        )
 
         if result["findings"]:
 
-            context.logger.info(
-                ""
+            findings_table(
+                "TLS Findings",
+                result["findings"],
             )
-
-            context.logger.info(
-                "TLS Findings"
-            )
-
-            for finding in result["findings"]:
-
-                context.logger.warning(
-                    f"- {finding}"
-                )
 
         self.save_workspace(
             context,
