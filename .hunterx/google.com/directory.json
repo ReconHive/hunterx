@@ -1,8 +1,0 @@
-{
-    "paths": [
-        "[301] https://google.com/dashboard -> https://www.google.com/dashboard",
-        "[301] https://google.com/docs -> https://www.google.com/docs",
-        "[301] https://google.com/robots.txt -> https://www.google.com/robots.txt",
-        "[301] https://google.com/sitemap.xml -> https://www.google.com/sitemap.xml"
-    ]
-}

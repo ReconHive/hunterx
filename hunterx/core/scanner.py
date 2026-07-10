@@ -57,33 +57,61 @@ class ScanEngine:
         if (
             "javascript" in names
             and "crawler" not in names
-            and not context.workspace.exists(
-                context.target,
-                "crawler",
-            )
         ):
 
-            crawler = self.plugins.get(
+            if context.workspace.exists(
+                context.target,
                 "crawler",
-            )
-
-            if crawler is not None:
+            ):
 
                 logger.info(
-                    "Crawler workspace not found."
+                    "Loading crawler data from workspace..."
                 )
 
-                logger.info(
-                    "Running crawler automatically..."
+                data = context.workspace.load(
+                    context.target,
+                    "crawler",
                 )
 
-                selected.insert(
-                    0,
-                    crawler,
+                if data:
+
+                    context.result.crawler.urls = data.get(
+                        "urls",
+                        [],
+                    )
+
+                    context.result.crawler.robots = data.get(
+                        "robots",
+                        [],
+                    )
+
+                    context.result.crawler.sitemap = data.get(
+                        "sitemap",
+                        [],
+                    )
+
+            else:
+
+                crawler = self.plugins.get(
+                    "crawler",
                 )
+
+                if crawler is not None:
+
+                    logger.info(
+                        "Crawler workspace not found."
+                    )
+
+                    logger.info(
+                        "Running crawler automatically..."
+                    )
+
+                    selected.insert(
+                        0,
+                        crawler,
+                    )
 
         return selected
-
     def run(
         self,
         target: str,
@@ -196,34 +224,38 @@ class ScanEngine:
 
             progress.stop()
 
-            context.events.publish(
-                ScanFinished(
-                    target=target,
-                )
+        #
+        # Everything below now runs ONCE, after all plugins finish
+        #
+
+        context.events.publish(
+            ScanFinished(
+                target=target,
             )
+        )
 
-            container.hooks.after_scan(
-                context,
-            )
+        container.hooks.after_scan(
+            context,
+        )
 
-            logger.blank()
-            logger.success("Scan completed")
+        logger.blank()
+        logger.success("Scan completed")
 
-            logger.blank()
-            logger.line()
-            logger.success("Metrics")
-            logger.line()
+        logger.blank()
+        logger.line()
+        logger.success("Metrics")
+        logger.line()
+
+        logger.success(
+            f"{'Total':<15} {context.metrics.elapsed:.2f}s"
+        )
+
+        for name, elapsed in context.metrics.metrics.plugins.items():
 
             logger.success(
-                f"{'Total':<15} {context.metrics.elapsed:.2f}s"
+                f"{name.upper():<15} {elapsed:.2f}s"
             )
 
-            for name, elapsed in context.metrics.metrics.plugins.items():
+        logger.blank()
 
-                logger.success(
-                    f"{name.upper():<15} {elapsed:.2f}s"
-                )
-
-            logger.blank()
-
-            container.close()
+        container.close()

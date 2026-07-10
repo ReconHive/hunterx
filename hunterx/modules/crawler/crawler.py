@@ -138,6 +138,46 @@ class WebCrawler:
                             )
                         )
 
+                    #
+                    # Script sources (JS bundles) — recorded
+                    # for downstream modules (e.g. javascript),
+                    # not queued for further HTML crawling.
+                    #
+
+                    for tag in soup.find_all(
+                        "script",
+                        src=True,
+                    ):
+
+                        src = tag["src"]
+
+                        absolute = urljoin(
+                            url,
+                            src,
+                        ).split("#")[0]
+
+                        parsed = urlparse(
+                            absolute,
+                        )
+
+                        if parsed.scheme not in (
+                            "http",
+                            "https",
+                        ):
+                            continue
+
+                        if (
+                            config.internal_only
+                            and parsed.netloc != context.target
+                        ):
+                            continue
+
+                        with lock:
+
+                            discovered.add(
+                                absolute,
+                            )
+
                 finally:
 
                     queue.task_done()
