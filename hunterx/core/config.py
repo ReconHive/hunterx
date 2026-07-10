@@ -83,6 +83,12 @@ class DirectoryConfig:
 
 
 @dataclass(slots=True)
+class PortsConfig:
+
+    ports: list[int] | None = None
+
+
+@dataclass(slots=True)
 class Config:
 
     dns: DNSConfig = field(
@@ -103,4 +109,8 @@ class Config:
 
     directory: DirectoryConfig = field(
         default_factory=DirectoryConfig,
+    )
+
+    ports: PortsConfig = field(
+        default_factory=PortsConfig
     )

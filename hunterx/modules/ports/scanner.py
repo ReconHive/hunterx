@@ -31,6 +31,11 @@ class PortScanner:
             context.config.http.timeout
         )
 
+        target_ports = (
+            context.config.ports.ports
+            or DEFAULT_PORTS
+        )
+
         open_ports: list[int] = []
 
         services: dict[int, str] = {}
@@ -50,7 +55,7 @@ class PortScanner:
                     timeout,
                 ): port
 
-                for port in DEFAULT_PORTS
+                for port in target_ports
 
             }
 

@@ -24,7 +24,104 @@ _SEVERITY_ICON = {
     "info": "ℹ",
 }
 
+_SENSITIVE_SERVICES = {
+    "ftp": "warning",
+    "ftp-data": "warning",
+    "telnet": "error",
+    "rpcbind": "warning",
+    "netbios": "warning",
+    "smb": "error",
+    "mssql": "error",
+    "oracle": "error",
+    "docker": "error",
+    "mysql": "error",
+    "rdp": "error",
+    "postgres": "error",
+    "vnc": "error",
+    "winrm": "error",
+    "redis": "error",
+    "elasticsearch": "error",
+    "memcached": "warning",
+    "mongodb": "error",
+    "nfs": "warning",
+}
 
+
+def _service_style(
+    service: str,
+) -> str:
+
+    return _SENSITIVE_SERVICES.get(
+        service,
+        "success",
+    )
+
+
+def ports_table(
+    title: str,
+    ports: list[int],
+    services: dict[int, str],
+    versions: dict[int, str | None],
+) -> None:
+
+    table = Table(
+        title=f"[bold cyan]{title}[/bold cyan]",
+        border_style="bright_blue",
+        header_style="bold cyan",
+        show_header=True,
+        expand=False,
+        pad_edge=True,
+    )
+
+    table.add_column(
+        "#",
+        justify="right",
+        style="cyan",
+        width=4,
+    )
+
+    table.add_column(
+        "Port",
+        justify="right",
+        width=8,
+    )
+
+    table.add_column(
+        "Service",
+        width=16,
+    )
+
+    table.add_column(
+        "Version / Banner",
+        style="white",
+    )
+
+    for index, port in enumerate(
+        ports,
+        start=1,
+    ):
+
+        service = services.get(
+            port,
+            "unknown",
+        )
+
+        style = _service_style(
+            service,
+        )
+
+        version = versions.get(
+            port,
+        ) or "-"
+
+        table.add_row(
+            str(index),
+            f"[{style}]{port}/tcp[/{style}]",
+            f"[{style}]{service}[/{style}]",
+            version,
+        )
+
+    console.print(table)
 
 
 

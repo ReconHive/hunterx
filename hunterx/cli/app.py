@@ -8,6 +8,7 @@ from hunterx.cli.banner import print_banner
 from hunterx.cli.console import console
 from hunterx.core.application import HunterX
 from hunterx.core.output.manager import OutputManager
+from hunterx.modules.ports.common import parse_ports
 
 app = typer.Typer(
     help="Modern Reconnaissance Framework",
@@ -61,7 +62,7 @@ def modules() -> None:
         "directory",
         "javascript",
         "tls",
-        "ports",
+        "portscanner",
         "report-generator",
     ]
 
@@ -133,6 +134,15 @@ def scan(
         "--dir-threads",
         help="Override directory workers",
     ),
+    ports: str | None = typer.Option(
+        None,
+        "--ports",
+        "-P",
+        help=(
+            "Ports to scan. Example: 22 or 22,25,1000 "
+            "or 1-1000 or - (all ports)"
+        ),
+    ),
     fresh: bool = typer.Option(
         False,
         "--fresh",
@@ -189,6 +199,63 @@ def scan(
     #
 
     hunter.config.crawler.depth = depth
+
+    #
+    # Ports
+    #
+
+    if ports:
+
+        try:
+
+            parsed_ports = parse_ports(
+                ports,
+            )
+
+        except ValueError:
+
+            console.print()
+
+            console.print(
+                "[error]Invalid port specification. "
+                "Example: 22 or 22,25,1000 or 1-1000 or -[/error]"
+            )
+
+            raise typer.Exit(code=1)
+
+        if not parsed_ports:
+
+            console.print()
+
+            console.print(
+                "[error]No valid ports parsed from input.[/error]"
+            )
+
+            raise typer.Exit(code=1)
+
+        if len(parsed_ports) > 5000:
+
+            console.print()
+
+            console.print(
+                f"[warning]This will scan {len(parsed_ports)} ports "
+                f"against {target}. This may take a long time and "
+                "could trigger rate limiting or IDS/IPS alerts.[/warning]"
+            )
+
+            confirmed = typer.confirm(
+                "Continue?",
+            )
+
+            if not confirmed:
+
+                console.print(
+                    "[error]Aborted.[/error]"
+                )
+
+                raise typer.Exit(code=0)
+
+        hunter.config.ports.ports = parsed_ports
 
     #
     # Plugins
