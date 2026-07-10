@@ -29,3 +29,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["hunterx"]
+
+[dependency-groups]
+dev = [
+    "build>=1.5.1",
+]
