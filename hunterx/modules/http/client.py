@@ -9,7 +9,6 @@ import time
 import httpx
 
 from hunterx.core.context import ScanContext
-from hunterx.core.logger import logger
 
 
 class HTTPClient:
@@ -30,7 +29,23 @@ class HTTPClient:
 
         if cached:
 
-            logger.info("HTTP cache hit.")
+            context.result.http.status = (
+                cached.status_code
+            )
+
+            context.result.http.server = (
+                cached.headers.get(
+                    "Server",
+                )
+            )
+
+            context.result.http.url = str(
+                cached.url,
+            )
+
+            context.result.http.headers = dict(
+                cached.headers,
+            )
 
             return cached
 
@@ -39,27 +54,8 @@ class HTTPClient:
         if context.custom_headers:
 
             context.http.set_headers(
-                context.custom_headers
+                context.custom_headers,
             )
-
-        logger.info("")
-        logger.info("Request")
-        logger.info(
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        )
-
-        logger.success(f"Method : {context.method}")
-        logger.success(f"URL : {url}")
-
-        for key, value in (
-            context.http.client.headers.items()
-        ):
-
-            logger.success(
-                f"{key}: {value}"
-            )
-
-        start = time.perf_counter()
 
         try:
 
@@ -68,55 +64,35 @@ class HTTPClient:
                 url=url,
             )
 
-            elapsed = (
-                time.perf_counter() - start
-            )
-
-            context.cache.set(
-                cache_key,
-                response,
-            )
-
-            logger.info("")
-            logger.info("Response")
-            logger.info(
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            )
-
-            logger.success(
-                f"Status : {response.status_code} {response.reason_phrase}"
-            )
-
-            logger.success(
-                f"Elapsed : {elapsed:.2f}s"
-            )
-
-            logger.success(
-                f"Size : {len(response.content)} bytes"
-            )
-
-            logger.success(
-                f"Final URL : {response.url}"
-            )
-
-            logger.info("")
-            logger.info("Response Headers")
-            logger.info(
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            )
-
-            for key, value in (
-                response.headers.items()
-            ):
-
-                logger.success(
-                    f"{key}: {value}"
-                )
-
-            return response
-
         except Exception as exc:
 
-            logger.error(str(exc))
+            context.logger.error(
+                str(exc),
+            )
 
             return None
+
+        context.cache.set(
+            cache_key,
+            response,
+        )
+
+        context.result.http.status = (
+            response.status_code
+        )
+
+        context.result.http.server = (
+            response.headers.get(
+                "Server",
+            )
+        )
+
+        context.result.http.url = str(
+            response.url,
+        )
+
+        context.result.http.headers = dict(
+            response.headers,
+        )
+
+        return response

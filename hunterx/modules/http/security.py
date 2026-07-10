@@ -5,7 +5,9 @@ HTTP Security Headers Analyzer
 from __future__ import annotations
 
 from httpx import Response
+from rich.table import Table
 
+from hunterx.cli.console import console
 from hunterx.core.context import ScanContext
 
 
@@ -70,11 +72,31 @@ class HTTPSecurityAnalyzer:
         response: Response,
     ) -> dict[str, str]:
 
-        context.logger.info(
-            "Analyzing security headers..."
+        result: dict[str, str] = {}
+
+        table = Table(
+            title="Security Headers",
+            header_style="bold cyan",
+            border_style="bright_blue",
+            expand=False,
         )
 
-        result: dict[str, str] = {}
+        table.add_column(
+            "Header",
+            style="bold cyan",
+            no_wrap=True,
+        )
+
+        table.add_column(
+            "Status",
+            justify="center",
+            no_wrap=True,
+        )
+
+        table.add_column(
+            "Value",
+            style="white",
+        )
 
         for header, info in self.SECURITY_HEADERS.items():
 
@@ -82,11 +104,13 @@ class HTTPSecurityAnalyzer:
 
             if value is None:
 
-                context.logger.warning(
-                    f"{header}: Missing"
-                )
-
                 result[header] = "Missing"
+
+                table.add_row(
+                    header,
+                    "[yellow]Missing[/yellow]",
+                    "-",
+                )
 
                 continue
 
@@ -94,33 +118,29 @@ class HTTPSecurityAnalyzer:
 
             if expected is None:
 
-                context.logger.success(
-                    f"{header}: Present"
-                )
-
                 result[header] = value
+
+                table.add_row(
+                    header,
+                    "[green]Present[/green]",
+                    value,
+                )
 
                 continue
 
-            value_lower = value.lower()
-
             valid = any(
-                item.lower() in value_lower
+                item.lower() in value.lower()
                 for item in expected
             )
 
-            if valid:
-
-                context.logger.success(
-                    f"{header}: OK"
-                )
-
-            else:
-
-                context.logger.warning(
-                    f"{header}: Weak ({value})"
-                )
-
             result[header] = value
+
+            table.add_row(
+                header,
+                "[green]OK[/green]" if valid else "[yellow]Weak[/yellow]",
+                value,
+            )
+
+        console.print(table)
 
         return result

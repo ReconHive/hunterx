@@ -10,11 +10,8 @@ from rich.progress import (
 )
 
 progress = Progress(
-    SpinnerColumn(style="cyan"),
-    TextColumn("[bold cyan]{task.description}"),
-    BarColumn(bar_width=35),
+    SpinnerColumn(),
+    TextColumn("[plugin]{task.description}"),
     TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-    TimeElapsedColumn(),
-    TimeRemainingColumn(),
-    transient=True,
+    transient=False,
 )

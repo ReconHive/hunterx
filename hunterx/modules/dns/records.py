@@ -4,6 +4,7 @@ DNS Records Module
 
 from __future__ import annotations
 
+from hunterx.cli.tables import key_value
 from hunterx.core.context import ScanContext
 
 
@@ -28,11 +29,9 @@ class DNSRecords:
 
         results: dict[str, list[str]] = {}
 
-        for record_type in record_types:
+        rows: list[tuple[str, str]] = []
 
-            context.logger.info(
-                f"{record_type} records"
-            )
+        for record_type in record_types:
 
             try:
 
@@ -48,16 +47,40 @@ class DNSRecords:
 
                 results[record_type] = values
 
-                for value in values:
+                if values:
 
-                    context.logger.success(value)
+                    for value in values:
+
+                        rows.append(
+                            (
+                                record_type,
+                                value,
+                            )
+                        )
+
+                else:
+
+                    rows.append(
+                        (
+                            record_type,
+                            "-",
+                        )
+                    )
 
             except Exception:
 
-                context.logger.warning(
-                    "Not found"
+                results[record_type] = []
+
+                rows.append(
+                    (
+                        record_type,
+                        "[yellow]Not found[/yellow]",
+                    )
                 )
 
-                results[record_type] = []
+        key_value(
+            "DNS Records",
+            rows,
+        )
 
         return results

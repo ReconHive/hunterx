@@ -6,6 +6,9 @@ from __future__ import annotations
 
 import time
 
+from hunterx.cli.tables import key_value
+from hunterx.cli.tables import simple
+
 from hunterx.core.context import ScanContext
 
 from hunterx.modules.subdomain.wordlist import Wordlist
@@ -28,31 +31,11 @@ class SubdomainScanner:
         context: ScanContext,
     ) -> list[str]:
 
-        context.logger.info(
-            "Checking wildcard DNS..."
-        )
+        start = time.perf_counter()
 
         wildcard = self.detector.detect(
-            context
+            context,
         )
-
-        if wildcard:
-
-            context.logger.warning(
-                "Wildcard DNS detected."
-            )
-
-        else:
-
-            context.logger.success(
-                "Wildcard DNS not detected."
-            )
-
-        context.logger.info(
-            "Starting subdomain scan..."
-        )
-
-        start = time.perf_counter()
 
         words = self.wordlist.load()
 
@@ -62,19 +45,50 @@ class SubdomainScanner:
         )
 
         elapsed = (
-            time.perf_counter() - start
+            time.perf_counter()
+            - start
         )
 
-        for host in hosts:
-
-            context.logger.success(host)
-
-        context.logger.info(
-            f"Found {len(hosts)} subdomains."
+        key_value(
+            "Discovery Summary",
+            [
+                (
+                    "Target",
+                    context.target,
+                ),
+                (
+                    "Wordlist",
+                    "common.txt",
+                ),
+                (
+                    "Wildcard DNS",
+                    "Detected"
+                    if wildcard
+                    else "Not Detected",
+                ),
+                (
+                    "Subdomains",
+                    str(len(hosts)),
+                ),
+                (
+                    "Elapsed",
+                    f"{elapsed:.2f}s",
+                ),
+            ],
         )
 
-        context.logger.info(
-            f"Elapsed: {elapsed:.2f}s"
-        )
+        if hosts:
+
+            simple(
+                "Discovered Subdomains",
+                "Host",
+                sorted(hosts),
+            )
+
+        else:
+
+            context.logger.warning(
+                "No subdomains found."
+            )
 
         return hosts

@@ -5,7 +5,9 @@ HTTP Cookies Analyzer
 from __future__ import annotations
 
 from httpx import Response
+from rich.table import Table
 
+from hunterx.cli.console import console
 from hunterx.core.context import ScanContext
 
 
@@ -17,11 +19,35 @@ class HTTPCookiesAnalyzer:
         response: Response,
     ) -> list[dict]:
 
-        context.logger.info(
-            "Analyzing cookies..."
+        cookies: list[dict] = []
+
+        table = Table(
+            title="Cookies",
+            header_style="bold cyan",
+            border_style="bright_blue",
+            expand=False,
         )
 
-        cookies: list[dict] = []
+        table.add_column(
+            "Cookie",
+            style="bold cyan",
+            no_wrap=True,
+        )
+
+        table.add_column(
+            "Secure",
+            justify="center",
+        )
+
+        table.add_column(
+            "HttpOnly",
+            justify="center",
+        )
+
+        table.add_column(
+            "SameSite",
+            justify="center",
+        )
 
         for cookie in response.cookies.jar:
 
@@ -29,9 +55,7 @@ class HTTPCookiesAnalyzer:
                 "name": cookie.name,
                 "secure": cookie.secure,
                 "httponly": (
-                    "HttpOnly" in (
-                        cookie._rest or {}
-                    )
+                    "HttpOnly" in (cookie._rest or {})
                 ),
                 "samesite": (
                     cookie._rest.get(
@@ -45,26 +69,15 @@ class HTTPCookiesAnalyzer:
 
             cookies.append(data)
 
-            context.logger.success(
-                f"Cookie : {cookie.name}"
+            table.add_row(
+                data["name"],
+                "✓" if data["secure"] else "✗",
+                "✓" if data["httponly"] else "✗",
+                str(data["samesite"]),
             )
 
-            context.logger.info(
-                f"  Secure : {data['secure']}"
-            )
+        if cookies:
 
-            context.logger.info(
-                f"  HttpOnly : {data['httponly']}"
-            )
-
-            context.logger.info(
-                f"  SameSite : {data['samesite']}"
-            )
-
-        if not cookies:
-
-            context.logger.warning(
-                "No cookies found."
-            )
+            console.print(table)
 
         return cookies

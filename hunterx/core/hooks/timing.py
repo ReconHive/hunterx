@@ -11,8 +11,6 @@ class TimingHook(Hook):
 
         self.scan_start = 0.0
 
-        self.plugin_start = 0.0
-
     def before_scan(
         self,
         context,
@@ -25,14 +23,7 @@ class TimingHook(Hook):
         context,
     ) -> None:
 
-        elapsed = (
-            time.perf_counter()
-            - self.scan_start
-        )
-
-        context.logger.success(
-            f"Scan Time : {elapsed:.2f}s"
-        )
+        pass
 
     def before_plugin(
         self,
@@ -40,7 +31,7 @@ class TimingHook(Hook):
         plugin,
     ) -> None:
 
-        self.plugin_start = time.perf_counter()
+        pass
 
     def after_plugin(
         self,
@@ -48,11 +39,4 @@ class TimingHook(Hook):
         plugin,
     ) -> None:
 
-        elapsed = (
-            time.perf_counter()
-            - self.plugin_start
-        )
-
-        context.logger.success(
-            f"{plugin.name} : {elapsed:.2f}s"
-        )
+        pass

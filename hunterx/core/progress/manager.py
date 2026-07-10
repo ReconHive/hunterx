@@ -25,7 +25,7 @@ class ProgressManager:
 
         self.current += 1
 
-        logger.info("")
+        logger.blank()
 
         logger.info(
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -41,7 +41,7 @@ class ProgressManager:
 
     def finish(self) -> None:
 
-        logger.info("")
+        logger.blank()
 
         logger.success(
             "All plugins finished."

@@ -1,63 +1,30 @@
 {
-    "status": 200,
-    "server": "gws",
-    "title": null,
-    "url": "https://www.google.com/",
+    "status": 405,
+    "reason": null,
+    "elapsed": null,
+    "size": null,
+    "server": null,
+    "title": "Google",
+    "url": "https://google.com",
     "headers": {
-        "content-type": "text/html; charset=ISO-8859-1",
-        "date": "Tue, 07 Jul 2026 16:08:23 GMT",
-        "expires": "-1",
-        "cache-control": "private, max-age=0",
-        "content-security-policy-report-only": "object-src 'none';base-uri 'self';script-src 'nonce-Ri6HqsZW_VGZ1Cg5lTekSg' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp",
-        "accept-ch": "Sec-CH-Prefers-Color-Scheme",
-        "p3p": "CP=\"This is not a P3P policy! See g.co/p3phelp for more info.\"",
-        "server": "gws",
-        "x-xss-protection": "0",
-        "x-frame-options": "SAMEORIGIN",
-        "set-cookie": "__Secure-STRP=ANmZwa1obZtu2aOwkHeJo6zNAmQ9hvDL-dcYXzsgYF9NTh6LUSe1yvpYzTmDtIwIJEg8NeeRzW5t5DprQgiSdfKWti2pKpMI0bEW; expires=Tue, 07-Jul-2026 16:13:23 GMT; path=/; domain=.google.com; Secure; SameSite=strict, AEC=AdJVEatVIjPgmgUSlzBNu6jlSjO8T507jwpG9B8nsTrIIHrSa5j1ijHwEFo; expires=Sun, 03-Jan-2027 16:08:23 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax, NID=532=aGdW9LhP3yAa9Un9jvG63cc3-agZ01yETqP9xYZ_XKZS6MDA3nx4WuA4DOcJk_aIvh6bQV9PODJbUw5y0ueg_0KnWAL0oANZn3VjrthutGJC65CJtXqTzrENB05NX5C_30ChDqrixO92NnWjgvO2gkXOk0b59ozNyIpDg9nUvokzjl1tUF0bj1Wxpbubml69VlM1GBZX1UeLro-8Dwl7isWO; expires=Wed, 06-Jan-2027 16:08:23 GMT; path=/; domain=.google.com; HttpOnly, __Secure-BUCKET=CL8B; expires=Sun, 03-Jan-2027 16:08:23 GMT; path=/; domain=.google.com; Secure; HttpOnly",
-        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-        "accept-ranges": "none",
-        "vary": "Accept-Encoding"
+        "content-type": "text/html; charset=UTF-8",
+        "referrer-policy": "no-referrer",
+        "content-length": "1589",
+        "date": "Fri, 10 Jul 2026 09:23:04 GMT",
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
     },
     "technologies": [],
     "security_headers": {
         "Content-Security-Policy": "Missing",
         "Strict-Transport-Security": "Missing",
-        "X-Frame-Options": "SAMEORIGIN",
+        "X-Frame-Options": "Missing",
         "X-Content-Type-Options": "Missing",
-        "Referrer-Policy": "Missing",
+        "Referrer-Policy": "no-referrer",
         "Permissions-Policy": "Missing",
         "Cross-Origin-Resource-Policy": "Missing",
         "Cross-Origin-Embedder-Policy": "Missing",
         "Cross-Origin-Opener-Policy": "Missing"
     },
-    "cookies": [
-        {
-            "name": "__Secure-STRP",
-            "secure": true,
-            "httponly": false,
-            "samesite": "strict"
-        },
-        {
-            "name": "AEC",
-            "secure": true,
-            "httponly": true,
-            "samesite": "lax"
-        },
-        {
-            "name": "NID",
-            "secure": false,
-            "httponly": true,
-            "samesite": "None"
-        },
-        {
-            "name": "__Secure-BUCKET",
-            "secure": true,
-            "httponly": true,
-            "samesite": "None"
-        }
-    ],
-    "cors": {
-        "Vary": "Accept-Encoding"
-    }
+    "cookies": [],
+    "cors": {}
 }

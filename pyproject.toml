@@ -1,5 +1,5 @@
 [project]
-name = "hunterx"
+name = "hunterx-reconhive"
 version = "0.1.0"
 description = "Modern modular reconnaissance framework for bug bounty hunters and security researchers."
 readme = "README.md"
@@ -21,8 +21,11 @@ dependencies = [
 ]
 
 [project.scripts]
-hunterx = "hunterx.cli.app:main"
+hunterx = "hunterx.cli.app:app"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["hunterx"]

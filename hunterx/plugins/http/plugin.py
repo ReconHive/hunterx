@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+from rich.table import Table
+
+from hunterx.cli.console import console
 from hunterx.core.context import ScanContext
 from hunterx.modules.http.client import HTTPClient
 from hunterx.modules.http.cookies import HTTPCookiesAnalyzer
+from hunterx.modules.http.cors import HTTPCORSAnalyzer
 from hunterx.modules.http.fingerprint import HTTPFingerprint
 from hunterx.modules.http.security import HTTPSecurityAnalyzer
 from hunterx.modules.http.technologies import TechnologyDetector
 from hunterx.plugins.base import Plugin
-from hunterx.modules.http.cors import HTTPCORSAnalyzer
+
 
 class HTTPPlugin(Plugin):
 
@@ -16,15 +20,10 @@ class HTTPPlugin(Plugin):
     def __init__(self) -> None:
 
         self.client = HTTPClient()
-
         self.fingerprint = HTTPFingerprint()
-
         self.technologies = TechnologyDetector()
-
         self.security = HTTPSecurityAnalyzer()
-
         self.cookies = HTTPCookiesAnalyzer()
-
         self.cors = HTTPCORSAnalyzer()
 
     def run(
@@ -38,66 +37,58 @@ class HTTPPlugin(Plugin):
             return
 
         context.result.http.status = response.status_code
+        context.result.http.server = response.headers.get("Server")
+        context.result.http.url = str(response.url)
+        context.result.http.headers = dict(response.headers)
 
-        context.result.http.server = (
-            response.headers.get("Server")
-        )
-
-        context.result.http.url = str(
-            response.url
-        )
-
-        context.result.http.headers = dict(
-            response.headers
-        )
-
-        self.fingerprint.analyze(
-            context
-        )
-
-        security = self.security.analyze(
-            context,
-            response,
-        )
-
-        cors = self.cors.analyze(
-            context,
-            response,
-        )
-
-        context.result.http.cors = cors
+        self.fingerprint.analyze(context)
 
         context.result.http.security_headers = (
-            security
+            self.security.analyze(
+                context,
+                response,
+            )
         )
 
-        cookies = self.cookies.analyze(
-            context,
-            response,
+        context.result.http.cors = (
+            self.cors.analyze(
+                context,
+                response,
+            )
         )
 
-        context.result.http.cookies = cookies
+        context.result.http.cookies = (
+            self.cookies.analyze(
+                context,
+                response,
+            )
+        )
 
         technologies = self.technologies.analyze(
             context,
             response,
         )
 
+        context.result.http.technologies = technologies
+
         if technologies:
 
-            context.logger.info(
-                "Detected Technologies"
+            table = Table(
+                title="Technologies",
+                header_style="bold cyan",
+                border_style="bright_blue",
+                expand=False,
+            )
+
+            table.add_column(
+                "Technology",
+                style="bold cyan",
             )
 
             for tech in technologies:
+                table.add_row(tech)
 
-                context.logger.success(
-                    tech
-                )
-
-            context.result.http.technologies = (
-                technologies
-            )
+            console.print(table)
 
         self.save_workspace(
             context,

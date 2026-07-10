@@ -23,9 +23,15 @@ class HTTPResult:
 
     status: int | None = None
 
+    reason: str | None = None
+
+    elapsed: float | None = None
+
+    size: int | None = None
+
     server: str | None = None
 
-    title: str |None = None
+    title: str | None = None
 
     url: str | None = None
 

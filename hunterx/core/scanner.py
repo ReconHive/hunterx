@@ -153,67 +153,77 @@ class ScanEngine:
             total=len(selected),
         )
 
-        with progress:
+        progress.start()
 
-            for plugin in selected:
+        for plugin in selected:
 
-                progress.update(
-                    task,
-                    description=f"[cyan]{plugin.name.upper()}",
-                )
-
-                container.hooks.before_plugin(
-                    context,
-                    plugin,
-                )
-
-                context.events.publish(
-                    PluginStarted(
-                        plugin=plugin.name,
-                    )
-                )
-
-                plugin.run(
-                    context,
-                )
-
-                context.events.publish(
-                    PluginFinished(
-                        plugin=plugin.name,
-                    )
-                )
-
-                container.hooks.after_plugin(
-                    context,
-                    plugin,
-                )
-
-                progress.advance(task)
-
-        context.events.publish(
-            ScanFinished(
-                target=target,
+            progress.update(
+                task,
+                description=f"[bold cyan]{plugin.name.upper()}",
             )
-        )
 
-        container.hooks.after_scan(
-            context,
-        )
+            progress.stop()
 
-        logger.info(
-            "Metrics"
-        )
+            container.hooks.before_plugin(
+                context,
+                plugin,
+            )
 
-        logger.success(
-            f"Elapsed : {context.metrics.elapsed:.2f}s"
-        )
+            context.events.publish(
+                PluginStarted(
+                    plugin=plugin.name,
+                )
+            )
 
-        for name, elapsed in (
-            context.metrics.metrics.plugins.items()
-        ):
+            plugin.run(
+                context,
+            )
+
+            context.events.publish(
+                PluginFinished(
+                    plugin=plugin.name,
+                )
+            )
+
+            container.hooks.after_plugin(
+                context,
+                plugin,
+            )
+
+            progress.start()
+
+            progress.advance(task)
+
+            progress.stop()
+
+            context.events.publish(
+                ScanFinished(
+                    target=target,
+                )
+            )
+
+            container.hooks.after_scan(
+                context,
+            )
+
+            logger.blank()
+            logger.success("Scan completed")
+
+            logger.blank()
+            logger.line()
+            logger.success("Metrics")
+            logger.line()
 
             logger.success(
-                f"{name} : {elapsed:.2f}s"
+                f"{'Total':<15} {context.metrics.elapsed:.2f}s"
             )
 
-        container.close()
+            for name, elapsed in context.metrics.metrics.plugins.items():
+
+                logger.success(
+                    f"{name.upper():<15} {elapsed:.2f}s"
+                )
+
+            logger.blank()
+
+            container.close()

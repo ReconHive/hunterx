@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from httpx import Response
+from rich.table import Table
 
+from hunterx.cli.console import console
 from hunterx.core.context import ScanContext
 
 
@@ -13,11 +15,7 @@ class HTTPCORSAnalyzer:
         response: Response,
     ) -> dict[str, str]:
 
-        context.logger.info(
-            "Analyzing CORS..."
-        )
-
-        headers = {}
+        headers: dict[str, str] = {}
 
         interesting = [
             "Access-Control-Allow-Origin",
@@ -28,24 +26,44 @@ class HTTPCORSAnalyzer:
             "Vary",
         ]
 
+        table = Table(
+            title="CORS",
+            header_style="bold cyan",
+            border_style="bright_blue",
+            expand=False,
+        )
+
+        table.add_column(
+            "Header",
+            style="bold cyan",
+            no_wrap=True,
+        )
+
+        table.add_column(
+            "Value",
+            style="white",
+        )
+
         for header in interesting:
 
-            value = response.headers.get(
-                header
-            )
+            value = response.headers.get(header)
 
             if value:
 
-                context.logger.success(
-                    f"{header}: {value}"
-                )
-
                 headers[header] = value
+
+                table.add_row(
+                    header,
+                    value,
+                )
 
             else:
 
-                context.logger.warning(
-                    f"{header}: Missing"
+                table.add_row(
+                    header,
+                    "[yellow]Missing[/yellow]",
                 )
+
+        console.print(table)
 
         return headers

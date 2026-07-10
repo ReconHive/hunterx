@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from hunterx.cli.panels import scan_configuration
 from hunterx.core.hooks.base import Hook
 from hunterx.core.logger import logger
 
@@ -11,18 +12,20 @@ class LoggerHook(Hook):
         context,
     ) -> None:
 
-        logger.info(
-            "Starting scan pipeline..."
+        logger.blank()
+
+        scan_configuration(
+            context,
         )
+
+        logger.blank()
 
     def after_scan(
         self,
         context,
     ) -> None:
 
-        logger.success(
-            "Scan completed."
-        )
+        pass
 
     def before_plugin(
         self,
@@ -30,8 +33,10 @@ class LoggerHook(Hook):
         plugin,
     ) -> None:
 
-        logger.info(
-            f"Running plugin: {plugin.name}"
+        logger.blank()
+
+        logger.success(
+            plugin.name.upper(),
         )
 
     def after_plugin(
@@ -40,4 +45,15 @@ class LoggerHook(Hook):
         plugin,
     ) -> None:
 
-        pass
+        elapsed = (
+            context.metrics.metrics.plugins.get(
+                plugin.name,
+                0.0,
+            )
+        )
+
+        logger.success(
+            f"{plugin.name.upper()} completed ({elapsed:.2f}s)",
+        )
+
+        logger.blank()

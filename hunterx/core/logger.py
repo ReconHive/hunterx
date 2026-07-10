@@ -6,7 +6,7 @@ Centralized logging system for HunterX.
 
 from __future__ import annotations
 
-from rich.console import Console
+from hunterx.cli.console import console
 
 
 class Logger:
@@ -15,22 +15,41 @@ class Logger:
     """
 
     def __init__(self) -> None:
-        self.console = Console()
+        self.console = console
 
     def info(self, message: str) -> None:
-        self.console.print(f"[cyan][INFO][/cyan] {message}")
+        self.console.print(
+            f"[info]ℹ[/info] {message}"
+        )
 
     def success(self, message: str) -> None:
-        self.console.print(f"[green][SUCCESS][/green] {message}")
+        self.console.print(
+            f"[success]✓[/success] {message}"
+        )
 
     def warning(self, message: str) -> None:
-        self.console.print(f"[yellow][WARNING][/yellow] {message}")
+        self.console.print(
+            f"[warning]⚠[/warning] {message}"
+        )
 
     def error(self, message: str) -> None:
-        self.console.print(f"[bold red][ERROR][/bold red] {message}")
+        self.console.print(
+            f"[error]✖[/error] {message}"
+        )
 
     def debug(self, message: str) -> None:
-        self.console.print(f"[magenta][DEBUG][/magenta] {message}")
+        self.console.print(
+            f"[plugin]●[/plugin] {message}"
+        )
+
+    def line(self) -> None:
+        self.console.print(
+            "────────────────────────────────────────────",
+            style="dim",
+        )
+
+    def blank(self) -> None:
+        self.console.print()
 
 
 logger = Logger()

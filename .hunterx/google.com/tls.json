@@ -71,12 +71,12 @@
         "android.clients.google.com",
         "*.aistudio.google.com"
     ],
-    "expires": "2026-09-07T08:38:56",
-    "days_remaining": 61,
+    "expires": "2026-09-14T08:35:22",
+    "days_remaining": 66,
     "expired": false,
     "self_signed": false,
     "wildcard": true,
-    "serial": "26DA90991E0F8D9A12332701A929C3EE",
+    "serial": "AE068DC8BDF3E7570A0C6AFB39C2E9C5",
     "signature_algorithm": null,
     "findings": [
         "Wildcard Certificate"

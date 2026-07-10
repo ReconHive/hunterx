@@ -135,7 +135,7 @@ wheels = [
 ]
 
 [[package]]
-name = "hunterx"
+name = "hunterx-reconhive"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
