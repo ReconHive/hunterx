@@ -1,0 +1,67 @@
+{
+    "dns": {
+        "ip": null,
+        "records": {}
+    },
+    "http": {
+        "status": null,
+        "reason": null,
+        "elapsed": null,
+        "size": null,
+        "server": null,
+        "title": null,
+        "url": null,
+        "headers": {},
+        "technologies": [],
+        "security_headers": {},
+        "cookies": [],
+        "cors": {}
+    },
+    "subdomains": {
+        "hosts": []
+    },
+    "crawler": {
+        "urls": [],
+        "robots": [],
+        "sitemap": []
+    },
+    "directory": {
+        "paths": []
+    },
+    "portscanner": {
+        "open_ports": [],
+        "services": {},
+        "banners": {}
+    },
+    "tls": {
+        "enabled": false,
+        "version": null,
+        "cipher": null,
+        "issuer": null,
+        "subject": null,
+        "san": [],
+        "expires": null,
+        "days_remaining": null,
+        "expired": false,
+        "self_signed": false,
+        "wildcard": false,
+        "serial": null,
+        "signature_algorithm": null,
+        "findings": []
+    },
+    "findings": [],
+    "javascript": {
+        "files": [],
+        "endpoints": [],
+        "urls": [],
+        "domains": [],
+        "secrets": []
+    },
+    "takeover": {
+        "findings": []
+    },
+    "params": {
+        "parameters": {},
+        "classified": {}
+    }
+}

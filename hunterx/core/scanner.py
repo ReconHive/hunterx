@@ -51,6 +51,77 @@ class ScanEngine:
         }
 
         #
+        # params -> crawler
+        #
+
+        if (
+            "params" in names
+            and "crawler" not in names
+        ):
+
+            if context.workspace.exists(
+                context.target,
+                "crawler",
+            ):
+
+                logger.info(
+                    "Loading crawler data from workspace..."
+                )
+
+                data = context.workspace.load(
+                    context.target,
+                    "crawler",
+                )
+
+                if data:
+
+                    context.result.crawler.urls = data.get(
+                        "urls",
+                        [],
+                    )
+
+                    context.result.crawler.robots = data.get(
+                        "robots",
+                        [],
+                    )
+
+                    context.result.crawler.sitemap = data.get(
+                        "sitemap",
+                        [],
+                    )
+
+            else:
+
+                crawler = self.plugins.get(
+                    "crawler",
+                )
+
+                if crawler is not None:
+
+                    logger.info(
+                        "Crawler workspace not found."
+                    )
+
+                    logger.info(
+                        "Running crawler automatically..."
+                    )
+
+                    selected.insert(
+                        0,
+                        crawler,
+                    )
+
+
+
+
+
+
+
+
+
+
+
+        #
         # javascript -> crawler
         #
 

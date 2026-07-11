@@ -149,6 +149,17 @@ class TakeoverResult:
 
 
 @dataclass(slots=True)
+class ParamsResult:
+
+    parameters: dict[str, list[str]] = field(
+        default_factory=dict,
+    )
+
+    classified: dict[str, list[str]] = field(
+        default_factory=dict,
+    )
+
+@dataclass(slots=True)
 class ScanResult:
 
     dns: DNSResult = field(
@@ -189,4 +200,8 @@ class ScanResult:
 
     takeover: TakeoverResult = field(
         default_factory=TakeoverResult,
+    )
+
+    params: ParamsResult = field(
+        default_factory=ParamsResult,
     )

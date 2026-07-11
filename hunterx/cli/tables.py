@@ -289,6 +289,68 @@ def _status_style(
     return "error"
 
 
+
+def params_findings(
+    title: str,
+    names: list[str],
+    parameters: dict[str, list[str]],
+) -> None:
+
+    table = Table(
+        title=f"[bold error]{title}[/bold error]",
+        border_style="error",
+        header_style="bold error",
+        show_header=True,
+        expand=False,
+        pad_edge=True,
+    )
+
+    table.add_column(
+        "#",
+        justify="right",
+        style="error",
+        width=4,
+    )
+
+    table.add_column(
+        "Parameter",
+        style="bold warning",
+    )
+
+    table.add_column(
+        "Example URL",
+        style="white",
+    )
+
+    for index, name in enumerate(
+        names,
+        start=1,
+    ):
+
+        examples = parameters.get(
+            name,
+            [],
+        )
+
+        example = examples[0] if examples else "-"
+
+        extra = (
+            f" (+{len(examples) - 1} more)"
+            if len(examples) > 1
+            else ""
+        )
+
+        table.add_row(
+            str(index),
+            name,
+            f"{example}{extra}",
+        )
+
+    console.print(table)
+
+
+
+
 def directory_results(
     title: str,
     rows: list[str],

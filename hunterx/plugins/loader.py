@@ -11,6 +11,7 @@ from hunterx.plugins.ports.plugin import PortScannerPlugin
 from hunterx.plugins.subdomain.plugin import SubdomainPlugin
 from hunterx.plugins.takeover.plugin import TakeoverPlugin
 from hunterx.plugins.tls.plugin import TLSPlugin
+from hunterx.plugins.params.plugin import ParamsPlugin
 
 
 class PluginLoader:
@@ -55,6 +56,10 @@ class PluginLoader:
 
         plugins.register(
             TakeoverPlugin(),
+        )
+
+        plugins.register(
+            ParamsPlugin(),
         )
 
         return plugins
