@@ -16,7 +16,28 @@ class DNSPool:
         config: Config,
     ) -> None:
 
-        self.resolver = dns.resolver.Resolver()
+        try:
+
+            #
+            # Use the operating system resolver configuration.
+            #
+
+            self.resolver = dns.resolver.Resolver()
+
+        except dns.resolver.NoResolverConfiguration:
+
+            #
+            # Fallback for environments without resolv.conf
+            # (e.g. Termux, some containers).
+            #
+
+            self.resolver = dns.resolver.Resolver(
+                configure=False,
+            )
+
+        #
+        # Configure resolver.
+        #
 
         self.resolver.timeout = (
             config.dns.timeout
@@ -26,9 +47,29 @@ class DNSPool:
             config.dns.lifetime
         )
 
-        self.resolver.nameservers = (
-            config.dns.nameservers
-        )
+        #
+        # Use configured nameservers when provided.
+        #
+
+        if config.dns.nameservers:
+
+            self.resolver.nameservers = (
+                config.dns.nameservers
+            )
+
+        #
+        # Otherwise provide sane defaults when the resolver
+        # has no nameservers (Termux, minimal containers, etc.).
+        #
+
+        elif not self.resolver.nameservers:
+
+            self.resolver.nameservers = [
+                "1.1.1.1",
+                "1.0.0.1",
+                "8.8.8.8",
+                "8.8.4.4",
+            ]
 
     def resolve(
         self,
