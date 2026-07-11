@@ -56,12 +56,6 @@
 
 ---
 
-<p align="center">
-<img src="assets/images/demo.gif" width="95%">
-</p>
-
----
-
 # HunterX
 
 HunterX is a modern reconnaissance framework written entirely in Python.
