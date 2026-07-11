@@ -31,18 +31,18 @@
 </a>
 
 <a href="LICENSE">
-<img src="https://img.shields.io/github/license/ByBug-Developers/HunterX?style=for-the-badge">
+<img src="https://img.shields.io/github/license/ReconHive/HunterX?style=for-the-badge">
 </a>
 
 <a href="https://www.python.org/">
 <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white">
 </a>
 
-<a href="https://github.com/ByBug-Developers/HunterX/stargazers">
+<a href="https://github.com/ReconHive/HunterX/stargazers">
 <img src="https://img.shields.io/github/stars/ByBug-Developers/HunterX?style=for-the-badge">
 </a>
 
-<a href="https://github.com/ByBug-Developers/HunterX/issues">
+<a href="https://github.com/ReconHive/HunterX/issues">
 <img src="https://img.shields.io/github/issues/ByBug-Developers/HunterX?style=for-the-badge">
 </a>
 
