@@ -18,7 +18,7 @@ def print_banner() -> None:
 ║                                                                              ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
-║  [bold white]HunterX[/bold white]   [bold green]v0.2.3[/bold green]                                                            ║
+║  [bold white]HunterX[/bold white]   [bold green]v0.2.4[/bold green]                                                            ║
 ║                                                                              ║                   
 ║  [cyan]Modern Reconnaissance Framework[/cyan]                                             ║
 ║                                                                              ║

@@ -64,7 +64,7 @@ def version() -> None:
     console.print()
 
     console.print(
-        "[header]Version[/header] : [success]0.2.3[/success]"
+        "[header]Version[/header] : [success]0.2.4[/success]"
     )
 
     console.print()
