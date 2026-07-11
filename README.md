@@ -5,7 +5,7 @@
 <!-- ========================================================= -->
 
 <p align="center">
-  <img src="assets/images/banner.png" alt="HunterX Banner" width="100%">
+  <img src="assets/images/banner.png" alt="HunterX Banner" width="100%" style="border-radius: 5px;">
 </p>
 
 <h1 align="center">HunterX</h1>
