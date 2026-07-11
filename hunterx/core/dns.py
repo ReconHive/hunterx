@@ -24,7 +24,11 @@ class DNSPool:
 
             self.resolver = dns.resolver.Resolver()
 
-        except dns.resolver.NoResolverConfiguration:
+        except (
+            dns.resolver.NoResolverConfiguration,
+            FileNotFoundError,
+            OSError,
+        ):
 
             #
             # Fallback for environments without resolv.conf

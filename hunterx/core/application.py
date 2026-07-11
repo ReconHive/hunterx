@@ -16,7 +16,7 @@ class HunterX:
     Main HunterX application.
     """
 
-    VERSION = "0.2.4"
+    VERSION = "0.2.5"
 
     def __init__(self) -> None:
 
