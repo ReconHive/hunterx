@@ -1,89 +1,63 @@
+<!-- ========================================================= -->
+
+<!-- Banner -->
+
+<!-- ========================================================= -->
+
 <p align="center">
-
-<svg width="180" height="180" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-
-<p align="center">
-
-➡️ [مشاهده نسخه فارسی](README_FA.md)
-</p>
-
-<linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="#00E5FF"/>
-<stop offset="100%" stop-color="#0066FF"/>
-</linearGradient>
-
-<linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="#00FFD5"/>
-<stop offset="100%" stop-color="#00B894"/>
-</linearGradient>
-
-<filter id="shadow">
-<feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00D9FF"/>
-</filter>
-
-</defs>
-
-<circle
-cx="110"
-cy="110"
-r="90"
-fill="#0D1117"
-stroke="url(#g1)"
-stroke-width="4"
-/>
-
-<circle
-cx="110"
-cy="110"
-r="65"
-fill="none"
-stroke="#00E5FF"
-stroke-width="2"
-stroke-dasharray="6 6"
-/>
-
-<circle
-cx="110"
-cy="110"
-r="42"
-fill="none"
-stroke="#00FFD5"
-stroke-width="2"
-/>
-
-<path
-d="M110 28
-L118 98
-L192 110
-L118 122
-L110 192
-L102 122
-L28 110
-L102 98Z"
-fill="url(#g1)"
-filter="url(#shadow)"
-opacity="0.95"
-/>
-
-<circle
-cx="110"
-cy="110"
-r="8"
-fill="#FFFFFF"
-/>
-
-</svg>
-
+  <img src="assets/images/banner.png" alt="HunterX Banner" width="100%">
 </p>
 
 <h1 align="center">HunterX</h1>
 
 <p align="center">
-Modern Modular Reconnaissance Framework
-<br>
-Built for Bug Bounty Hunters • Pentesters • Security Researchers
+  <strong>Modern Workspace-Aware Reconnaissance Framework</strong>
+</p>
+
+<p align="center">
+  Built for Bug Bounty Hunters • Penetration Testers • Security Researchers
+</p>
+
+<p align="center">
+  Fast • Modular • Intelligent • Extensible
+</p>
+
+---
+
+<p align="center">
+
+<a href="https://pypi.org/project/hunterx-reconhive/">
+<img src="https://img.shields.io/pypi/v/hunterx-reconhive?style=for-the-badge&logo=pypi">
+</a>
+
+<a href="LICENSE">
+<img src="https://img.shields.io/github/license/ByBug-Developers/HunterX?style=for-the-badge">
+</a>
+
+<a href="https://www.python.org/">
+<img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white">
+</a>
+
+<a href="https://github.com/ByBug-Developers/HunterX/stargazers">
+<img src="https://img.shields.io/github/stars/ByBug-Developers/HunterX?style=for-the-badge">
+</a>
+
+<a href="https://github.com/ByBug-Developers/HunterX/issues">
+<img src="https://img.shields.io/github/issues/ByBug-Developers/HunterX?style=for-the-badge">
+</a>
+
+</p>
+
+<p align="center">
+
+🇺🇸 English • 🇮🇷 <a href="README_FA.md">فارسی</a>
+
+</p>
+
+---
+
+<p align="center">
+<img src="assets/images/demo.gif" width="95%">
 </p>
 
 ---
@@ -92,45 +66,21 @@ Built for Bug Bounty Hunters • Pentesters • Security Researchers
 
 HunterX is a modern reconnaissance framework written entirely in Python.
 
-It is designed for bug bounty hunters, penetration testers and security researchers who need a fast, modular and extensible reconnaissance toolkit.
+Unlike traditional reconnaissance tools, HunterX executes plugins through a shared workspace, allowing collected artifacts to be reused across scans instead of repeating the same network operations.
 
-Unlike traditional monolithic scanners, HunterX uses an independent plugin architecture, allowing every module to work individually or as part of a complete reconnaissance pipeline.
-
----
-
-# Features
-
-- Modular architecture
-- Plugin-based design
-- Fast HTTP engine
-- DNS reconnaissance
-- Subdomain enumeration
-- JavaScript analysis
-- Web crawler
-- Directory brute forcing
-- Security header analysis
-- Cookie analysis
-- CORS analysis
-- Technology fingerprinting
-- Workspace support
-- JSON reports
-- Markdown reports
-- Colored terminal UI
-- Progress bars
-- Rich logging
-- Extensible API
+Its modular architecture, automatic dependency resolution, and workspace-aware execution make reconnaissance faster, cleaner, and more efficient.
 
 ---
 
-# Installation
+# 🚀 Quick Install
 
-## Using pip
+Using pip
 
 ```bash
 pip install hunterx-reconhive
 ```
 
-## Using uv
+Using uv
 
 ```bash
 uv tool install hunterx-reconhive
@@ -138,217 +88,130 @@ uv tool install hunterx-reconhive
 
 ---
 
-# Usage
+# ⚡ Quick Start
 
-Basic scan
+Run a complete reconnaissance scan.
 
 ```bash
 hunterx scan example.com
 ```
 
-Run specific plugins
+Run only selected plugins.
 
 ```bash
-hunterx scan example.com --plugins dns,http,crawler
+hunterx scan example.com -p dns,http,crawler
 ```
 
-Custom HTTP headers
-
-```bash
-hunterx scan example.com -H "Authorization: Bearer TOKEN"
-```
-
-POST request
-
-```bash
-hunterx scan example.com -X POST
-```
-
-Directory scan
-
-```bash
-hunterx scan example.com --plugins directory
-```
-
-Crawler
-
-```bash
-hunterx scan example.com --plugins crawler
-```
-
-JavaScript analysis
-
-```bash
-hunterx scan example.com --plugins javascript
-```
-
-Generate JSON report
+Generate a report.
 
 ```bash
 hunterx scan example.com -o report.json
 ```
 
-Generate Markdown report
-
-```bash
-hunterx scan example.com -o report.md
-```
-
----
-
-# Available Plugins
-
-| Plugin | Description |
-|---------|-------------|
-| dns | DNS Reconnaissance |
-| http | HTTP Analysis |
-| crawler | Website Crawling |
-| javascript | JavaScript Analysis |
-| directory | Directory Enumeration |
-| subdomain | Subdomain Enumeration |
-| tls | TLS Scanner |
-| ports | Port Scanner |
-
----
-
-# Example
-
-```bash
-hunterx scan google.com --plugins dns,http,crawler,javascript -o report.json
-```
-
----
-
-# Project Structure
-
-```
-hunterx/
-│
-├── cli/
-├── core/
-├── modules/
-├── plugins/
-└── utils/
-```
-
----
-
-# Architecture
-
-```
-CLI
-
-↓
-
-Core Engine
-
-↓
-
-Plugin Loader
-
-↓
-
-Plugins
-
-↓
-
-Modules
-
-↓
-
-Result Objects
-
-↓
-
-Workspace / Report
-```
-
----
-
-# Current Modules
-
-✅ DNS
-
-✅ HTTP
-
-✅ Cookies
-
-✅ Security Headers
-
-✅ CORS
-
-✅ Fingerprinting
-
-✅ Directory Scanner
-
-✅ Web Crawler
-
-✅ JavaScript Analyzer
-
----
-
-# Roadmap
-
--
-
-- TLS Scanner improvements
-- Port Scanner
-- WAF Detection
-- Screenshot Engine
-- Parameter Discovery
-- Archive.org integration
-- Wayback Machine
-- CDN Detection
-- ASN Lookup
-- CSP Analyzer
-- HTTP/2 & HTTP/3 analysis
-- HTTP Request Smuggling checks
-- GraphQL discovery
-- Swagger/OpenAPI detection
-- Secret Discovery
-- AWS bucket discovery
-- Passive Recon
-- Shodan integration
-- Censys integration
-- VirusTotal integration
-- HTML Report
-- Live Dashboard
+More examples are available in the Wiki.
 
 ---
 
 # Why HunterX?
 
-HunterX focuses on
+HunterX is designed around a simple philosophy:
 
-- Clean architecture
-- High performance
-- Readable output
-- Easy plugin development
-- Modern Python practices
-- Lightweight dependencies
+**Discover once. Store everything. Reuse everywhere.**
+
+Instead of repeating reconnaissance tasks, plugins share artifacts through a common workspace. This minimizes redundant requests, speeds up scans, and enables intelligent plugin orchestration.
 
 ---
 
-# Contributing
+# Features
 
-Contributions are welcome.
-
-Fork the repository
-
-Create your feature branch
-
-Submit a Pull Request
+* Modular plugin architecture
+* Workspace-aware execution
+* Automatic dependency resolution
+* DNS reconnaissance
+* HTTP fingerprinting
+* Subdomain enumeration
+* Website crawling
+* JavaScript analysis
+* Parameter extraction
+* Directory enumeration
+* Port scanning
+* TLS inspection
+* Takeover detection
+* JSON & Markdown reports
+* Rich terminal interface
+* Extensible plugin system
 
 ---
 
-# License
+# 📚 Documentation
 
-MIT License
+Complete documentation is available in the GitHub Wiki.
+
+| Guide                 | Description                    |
+| --------------------- | ------------------------------ |
+| Installation          | Install HunterX                |
+| Quick Start           | Run your first scan            |
+| CLI Reference         | Command-line options           |
+| Plugins               | Available plugins              |
+| Workspace             | Shared artifact storage        |
+| Dependency Resolution | Automatic plugin orchestration |
+| Architecture          | Framework design               |
+| Examples              | Practical workflows            |
+| FAQ                   | Frequently asked questions     |
 
 ---
 
-# Disclaimer
+# 🏗 Architecture
 
-HunterX is intended for educational purposes and authorized security assessments only.
+```text
+             CLI
+              │
+              ▼
+      HunterX Core Engine
+              │
+              ▼
+   Dependency Resolution
+              │
+              ▼
+      Workspace Engine
+              │
+      ┌───────┼────────┐
+      ▼       ▼        ▼
+     DNS     HTTP   Crawler
+                      │
+             ┌────────┴────────┐
+             ▼                 ▼
+      JavaScript         Parameters
+             │
+             ▼
+      Report Generator
+```
 
-The author is not responsible for any misuse.
+See the Wiki for a detailed explanation of the architecture.
+
+---
+
+# 🤝 Community
+
+Contributions are always welcome.
+
+* Report bugs
+* Suggest new features
+* Submit pull requests
+* Improve documentation
+
+If HunterX helps your security research, consider giving the project a ⭐ on GitHub.
+
+---
+
+# 📄 License
+
+MIT License.
+
+---
+
+# ⚠ Disclaimer
+
+HunterX is intended for authorized security assessments and educational purposes only.
+
+The author assumes no responsibility for misuse or damage caused by this software.
