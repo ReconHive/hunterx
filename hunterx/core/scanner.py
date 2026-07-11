@@ -111,7 +111,59 @@ class ScanEngine:
                         crawler,
                     )
 
+        #
+        # takeover -> subdomain
+        #
+
+        if (
+            "takeover" in names
+            and "subdomain" not in names
+        ):
+
+            if context.workspace.exists(
+                context.target,
+                "subdomain",
+            ):
+
+                logger.info(
+                    "Loading subdomain data from workspace..."
+                )
+
+                data = context.workspace.load(
+                    context.target,
+                    "subdomain",
+                )
+
+                if data:
+
+                    context.result.subdomains.hosts = data.get(
+                        "hosts",
+                        [],
+                    )
+
+            else:
+
+                subdomain = self.plugins.get(
+                    "subdomain",
+                )
+
+                if subdomain is not None:
+
+                    logger.info(
+                        "Subdomain workspace not found."
+                    )
+
+                    logger.info(
+                        "Running subdomain scan automatically..."
+                    )
+
+                    selected.insert(
+                        0,
+                        subdomain,
+                    )
+
         return selected
+
     def run(
         self,
         target: str,

@@ -9,6 +9,7 @@ from hunterx.plugins.http.plugin import HTTPPlugin
 from hunterx.plugins.javascript.plugin import JavaScriptPlugin
 from hunterx.plugins.ports.plugin import PortScannerPlugin
 from hunterx.plugins.subdomain.plugin import SubdomainPlugin
+from hunterx.plugins.takeover.plugin import TakeoverPlugin
 from hunterx.plugins.tls.plugin import TLSPlugin
 
 
@@ -50,6 +51,10 @@ class PluginLoader:
 
         plugins.register(
             JavaScriptPlugin(),
+        )
+
+        plugins.register(
+            TakeoverPlugin(),
         )
 
         return plugins

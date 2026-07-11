@@ -140,7 +140,12 @@ class TLSResult:
     )
 
 
+@dataclass(slots=True)
+class TakeoverResult:
 
+    findings: list[dict] = field(
+        default_factory=list,
+    )
 
 
 @dataclass(slots=True)
@@ -180,4 +185,8 @@ class ScanResult:
 
     javascript: JavaScriptResult = field(
         default_factory=JavaScriptResult,
+    )
+
+    takeover: TakeoverResult = field(
+        default_factory=TakeoverResult,
     )

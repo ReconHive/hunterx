@@ -36,8 +36,26 @@ def version() -> None:
     console.print()
 
     console.print(
-        "[header]Version[/header] : [success]0.1.0[/success]"
+        "[header]Version[/header] : [success]0.2.3[/success]"
     )
+
+    console.print()
+
+@app.command()
+def author() -> None:
+    """
+    Show HunterX Author.
+    """
+
+    print_banner()
+
+    console.print()
+
+    console.print(
+        "[header]Author[/header] : The author of HunterX is Alireza."
+    )
+
+    console.print()
 
 
 @app.command()
@@ -63,6 +81,7 @@ def modules() -> None:
         "javascript",
         "tls",
         "portscanner",
+        "takeover",
         "report-generator",
     ]
 
@@ -70,6 +89,8 @@ def modules() -> None:
         console.print(
             f" • [plugin]{module}[/plugin]"
         )
+
+    console.print()
 
 
 @app.command()

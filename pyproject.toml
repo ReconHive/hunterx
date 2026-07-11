@@ -1,6 +1,6 @@
 [project]
 name = "hunterx-reconhive"
-version = "0.1.0"
+version = "0.2.3"
 description = "Modern modular reconnaissance framework for bug bounty hunters and security researchers."
 readme = "README.md"
 requires-python = ">=3.13"
@@ -33,4 +33,5 @@ packages = ["hunterx"]
 [dependency-groups]
 dev = [
     "build>=1.5.1",
+    "pytest>=9.1.1",
 ]

@@ -14,6 +14,8 @@ class Plugin(ABC):
 
     version: str = "0.1.0"
 
+    depends_on: list[str] = []
+
     @abstractmethod
     def run(
         self,

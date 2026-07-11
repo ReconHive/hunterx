@@ -46,6 +46,96 @@ _SENSITIVE_SERVICES = {
     "nfs": "warning",
 }
 
+_CONFIDENCE_STYLE = {
+    "high": "error",
+    "medium": "warning",
+    "low": "info",
+}
+
+
+def takeover_findings(
+    title: str,
+    rows: list[dict],
+) -> None:
+
+    table = Table(
+        title=f"[bold error]{title}[/bold error]",
+        border_style="error",
+        header_style="bold error",
+        show_header=True,
+        expand=False,
+        pad_edge=True,
+    )
+
+    table.add_column(
+        "#",
+        justify="right",
+        style="error",
+        width=4,
+    )
+
+    table.add_column(
+        "Host",
+        style="white",
+    )
+
+    table.add_column(
+        "Service",
+        style="bold warning",
+    )
+
+    table.add_column(
+        "CNAME",
+        style="white",
+    )
+
+    table.add_column(
+        "Signal",
+        justify="center",
+        width=12,
+    )
+
+    table.add_column(
+        "Confidence",
+        justify="center",
+        width=10,
+    )
+
+    for index, row in enumerate(
+        rows,
+        start=1,
+    ):
+
+        signal = (
+            "Dangling DNS"
+            if row["dangling_dns"]
+            else row["matched_via"].replace(
+                "_",
+                " ",
+            ).title()
+        )
+
+        confidence = row.get(
+            "confidence",
+            "medium",
+        )
+
+        style = _CONFIDENCE_STYLE.get(
+            confidence,
+            "warning",
+        )
+
+        table.add_row(
+            str(index),
+            row["host"],
+            row["service"],
+            row["cname"],
+            signal,
+            f"[{style}]{confidence.upper()}[/{style}]",
+        )
+
+    console.print(table)
+
 
 def _service_style(
     service: str,
@@ -122,11 +212,6 @@ def ports_table(
         )
 
     console.print(table)
-
-
-
-
-
 
 def findings(
     title: str,
