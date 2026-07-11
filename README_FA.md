@@ -1,12 +1,60 @@
 <div dir="rtl">
 
+<!-- ========================================================= -->
+
+<!-- Banner -->
+
+<!-- ========================================================= -->
+
+<p align="center">
+  <img src="assets/images/banner.png" alt="HunterX Banner" width="100%" style="border-radius: 5px;">
+</p>
+
+<h1 align="center">HunterX</h1>
+
+<p align="center">
+  <strong>Modern Workspace-Aware Reconnaissance Framework</strong>
+</p>
+
+<p align="center">
+  Built for Bug Bounty Hunters • Penetration Testers • Security Researchers
+</p>
+
+<p align="center">
+  Fast • Modular • Intelligent • Extensible
+</p>
+
 ---
+
+<p align="center">
+
+<a href="https://pypi.org/project/hunterx-reconhive/">
+<img src="https://img.shields.io/pypi/v/hunterx-reconhive?style=for-the-badge&logo=pypi">
+</a>
+
+<a href="LICENSE">
+<img src="https://img.shields.io/github/license/ReconHive/HunterX?style=for-the-badge">
+</a>
+
+<a href="https://www.python.org/">
+<img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white">
+</a>
+
+<a href="https://github.com/ReconHive/HunterX/stargazers">
+<img src="https://img.shields.io/github/stars/ByBug-Developers/HunterX?style=for-the-badge">
+</a>
+
+<a href="https://github.com/ReconHive/HunterX/issues">
+<img src="https://img.shields.io/github/issues/ByBug-Developers/HunterX?style=for-the-badge">
+</a>
+
+</p>
+
 
 🇮🇷 **فارسی** • 🇺🇸 [English](README.md)
 
 ---
 
-# HunterX
 
 هانتر ایکس یک فریمورک مدرن شناسایی (Reconnaissance Framework) است که به‌طور کامل با زبان Python توسعه یافته است.
 
